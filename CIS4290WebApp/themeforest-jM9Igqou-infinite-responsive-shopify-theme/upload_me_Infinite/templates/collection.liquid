@@ -1,0 +1,28 @@
+{% comment %}
+  The contents of the collection.liquid template can be found in /sections/collection-template.liquid
+{% endcomment %}
+
+{% if settings.collection_page_sidebar == "left_sidebar" or  settings.collection_page_sidebar == "right_sidebar" %}
+{% assign mid_width = "col-md-9" %}
+{% else %}
+{% assign mid_width = "page-width" %}
+{% endif %}
+{% if settings.collection_page_sidebar == "left_sidebar" and settings.disable_sidebar != blank %}
+<div class="col-md-3 col-sm-12 col-xs-12 normal-sidebar sidebar_content">
+{% section "Ishi_sidebar" %}
+</div>
+{% endif %}	
+<div class="normal_main_content {% if settings.disable_sidebar == blank %}col-md-12{% else %}{{ mid_width }}{% endif %}">
+{% section 'collection-template' %}
+</div>
+{% if settings.collection_page_sidebar == "right_sidebar" and settings.disable_sidebar != blank %}
+ <div class="col-md-3 col-sm-12 col-xs-12 normal-sidebar sidebar_content">
+     {% section "Ishi_sidebar" %}
+</div>
+{% endif %}
+{% if settings.collection_page_sidebar == "right_sidebar" or settings.collection_page_sidebar == "left_sidebar" and settings.disable_sidebar != blank %}
+<div class="responsive-sidebar sidebar_content"></div>
+{% endif %}
+
+
+

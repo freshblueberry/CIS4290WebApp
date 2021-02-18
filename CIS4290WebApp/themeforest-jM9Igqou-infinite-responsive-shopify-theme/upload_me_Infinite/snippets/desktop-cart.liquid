@@ -1,0 +1,34 @@
+<div class="cart-display">
+  <div class="cart-title clearfix collapsed" data-target="#cart-container" data-toggle="collapse">
+    <div class="site-header__cart expand-more">
+      <span class="header-cart-logo header-cart-logo1 header-cart-logo5">
+        <span class="hidden-lg-down">
+          {% include 'icons' with 'shopping-cart' %}
+        </span>
+        <span class="hidden-lg-up">
+          {% include 'icons' with 'cart' %}
+        </span>
+      </span>
+      <span class="header-cart-logo header-cart-logo2 header-cart-logo3 header-cart-logo4">
+        <span class="hidden-lg-down">
+          {% include 'icons' with 'shopping-cart2' %}
+        </span>
+        <span class="hidden-lg-up">
+          {% include 'icons' with 'cart' %}
+        </span>
+      </span>
+      <span class="cart-qty"></span>
+      <span class="cart-price text-content">
+        <span class="main-title">{{ 'layout.cart.title' | t }}</span>
+        <span class="cart-count sub-title">
+          <span class="cart-qty"></span>
+          <span class="cart-items hidden-lg-down">{{ 'layout.cart.items_count' | t: count: cart.item_count }}</span>
+          -&nbsp; <span class="cart__subtotal"></span>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div id="cart-container" class="cart-dropdown-inner cart-dropdown collapse">
+    {% include 'cart-dropdown'%}
+  </div>
+</div>

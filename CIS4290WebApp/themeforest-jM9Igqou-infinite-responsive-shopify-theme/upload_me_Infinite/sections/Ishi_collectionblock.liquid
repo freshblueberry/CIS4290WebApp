@@ -1,0 +1,132 @@
+<div class="ishicollectionblock">
+	<div class="page-width">
+       {% if section.settings.title1 != blank or section.settings.title2 != blank %}
+        <div class="section-header text-center">
+          {% if section.settings.title1 != blank %}
+            <div class="section-header text-center">
+              <h2 class="home-title">{{ section.settings.title1 | escape }}</h2>
+            </div>
+          {% endif %}
+          {% if section.settings.title2 != blank %}
+            <div class="subtitle text-center">
+              <p class="home-subtitle">{{ section.settings.title2 | escape }}</p>
+            </div>
+          {% endif %}
+        </div>
+    {% endif %}
+      <div class="row">
+        
+    {% assign i = 1 %}
+    {%- assign collection = collections[block.settings.collection] -%}
+    {% if section.blocks.size > 0 %}
+			{% for block in section.blocks %}
+				<div id="ishicollectionblock_{{ i }}" class="ishicollectionblock-containers col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                   <div class="ishicollectionblock-container">
+						  <div class="image-container">
+                            {%- assign collection = collections[block.settings.collection] -%}
+  	        				<a href="{{ collection.url }}">
+  	        					{% if block.settings.image != blank %}
+  									   <img 
+  					                 src="{{ block.settings.image | img_url: '370x370' }}"
+  					                 data-src="{{ img_url }}"
+  					                 data-widths="[370]"
+  					                 data-sizes="auto"
+  					                 alt="{{ linklists[category_linklist].title }}">
+                             {% else %}
+                              <img 
+                               src="https://via.placeholder.com/370x370/f2f2f2.png?text=Size : 370px X 370px"
+                               data-src="https://via.placeholder.com/370x370/f2f2f2.png?text=Size : 370px X 370px"
+                               data-widths="[370]"
+                               data-sizes="auto"
+                               alt="placeholder"> 
+  				                {% endif %}   
+  		        			</a>
+                            {%- assign collection = collections[block.settings.collection] -%}
+                            {% if block.settings.collection != blank %}
+                          <a href="{{ collection.url }}" class="menu-container">
+                              <span class="heading"> {{ collection.title }}</span>
+                            <div class="collection-item">{{ collection.all_products.size }} {{ 'general.module.item' | t }}</div>
+                          </a>
+                           {% endif %} 
+	        		</div>
+                 </div>
+					{% assign i = i | plus: 1 %}  
+				</div>
+			{% endfor %}
+    {% endif %}
+        </div>
+      </div>
+</div>
+
+<style type="text/css">
+  .ishi-collection-section {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  @media (max-width: 767px) {
+    .ishi-collection-section {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Ishi Collection Block",
+    "class": "ishi-collection-section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title",
+        "default": "Our Category"
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing" 
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 0
+      }
+    ],
+    "blocks": [
+      { 
+        "type": "image",
+        "name": "Collection Item",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Size: 370px X 370px"
+          },
+	      {
+            "id": "collection",
+            "type": "collection",
+            "label": "Collection"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Collection Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}

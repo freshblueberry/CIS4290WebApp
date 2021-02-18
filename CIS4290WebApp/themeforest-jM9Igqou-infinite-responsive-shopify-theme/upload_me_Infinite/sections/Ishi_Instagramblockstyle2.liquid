@@ -1,0 +1,211 @@
+
+  <div class="instafeed-news">
+    <div class="ishiinstagram {% if section.settings.insta_layout == 'box' %}page-width{% endif %}">
+     <div class="ishiinstagram-inner">
+        {% if section.settings.username != blank %}
+          <div class="home-title section-header text-center">
+          <a href="https://www.instagram.com/{{section.settings.username}}" target="_blank" rel="nofollow">
+              {{ section.settings.title1 | escape }}
+              <span>@{{section.settings.username}}</span>
+          </a>
+        </div>
+        {% endif %}
+        <div id="instafeed" class="instafeed owl-carousel"></div>
+       </div>
+    </div>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/gh/stevenschobert/instafeed.js@2.0.0rc1/src/instafeed.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/instafeed.js/1.4.1/instafeed.min.js"></script>  -->
+<script type="text/javascript">
+$(document).ready(function () {
+
+  var userFeed = new Instafeed({
+    get: 'user',
+    target: "instafeed",
+    accessToken: '{{section.settings.accestoken}}',
+    resolution: 'low_resolution',
+    sortBy: 'most-recent',
+    template:'<div class="instaitem{% if section.settings.greyscale %} instahover{% endif %}" style="margin-right: {{ section.settings.space }}px; margin-left: {{ section.settings.space }}px;"><a href={{"{{link"}}}} target="_blank" id={{"{{id"}}}}><img src={{"{{image"}}}} /><div class="image-overlay"><span></span></div><span class="instagram"><i class="fa fa-instagram" aria-hidden="true"></i></span></a><div class="text-container"><span class="likes"><span class="likes-count">{{"{{likes"}}}}</span><i class="fa fa-heart" aria-hidden="true"></i></span><span class="comments"><span class="comments-count">{{"{{comments"}}}}</span><i class="fa fa-comments" aria-hidden="true"></i></span></div></div>',
+    links: false,
+    after: function(){
+        $('.instafeed').owlCarousel({
+          nav: false,
+          loop: true,
+          responsive: {
+            0: {
+              items: {{ section.settings.rowproduct_limit_Small }}
+            },
+            543: {
+              items: {{ section.settings.rowproduct_limit_Mobile }}
+            },
+            768: {
+              items: {{ section.settings.rowproduct_limit_Tablet }}
+            },
+            992: {
+              items: {{ section.settings.rowproduct_limit_Laptop }}
+            },
+            1200: {
+              items: {{ section.settings.rowproduct_limit_Desktop }}
+            }
+          }
+        });
+        insertDummyData();
+        resizeInstagramTitle();
+
+    }
+  });
+  userFeed.run();
+});
+
+function insertDummyData() {
+
+    $(".ishiinstagram .owl-item").each(function(){
+      $(this).find(".comments-count").text(niceNumberDisplay(Math.floor((Math.random() * 10000) + 1)));
+      $(this).find(".likes-count").text(niceNumberDisplay(Math.floor((Math.random() * 100000) + 1)));
+    });
+}
+
+
+
+
+function niceNumberDisplay(num) {
+    var n = parseFloat(num);
+    if(n > 1000000) {
+        return Math.round(n / 1000000) + 'm';
+    } else if(n > 1000) {
+        return Math.round(n / 1000) + 'k';
+    } else {
+        return n.toFixed(0);
+    }
+}
+</script>
+
+<style type="text/css">
+  
+  .ishi_instagram-style2{
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  @media (max-width: 767px) {
+    .ishi_instagram-style2{
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Instagram Style2",
+    "class": "ishi_instagram-style2",
+    "settings": [
+      {
+        "type": "select",
+        "id": "insta_layout",
+        "label": "Layout",
+        "default": "full",
+        "options": [
+          { "value": "box", "label": "Box"},
+          { "value": "full", "label": "Full"}
+        ]
+      },
+           
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title",
+        "default": "Follow Us"
+      },
+      {
+        "type": "text",
+        "id": "accestoken",
+        "label": "Accestoken",
+        "default": "6827780227.1677ed0.3e90efc2ae2841968d0774998fad7834"
+      },
+      {
+        "type": "text",
+        "id": "username",
+        "label": "Username",
+        "default": " Instagram"
+      },
+	  {
+        "type": "checkbox",
+        "id": "greyscale",
+        "label": "Show Black & White Images",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Small",
+        "label": "Max Image for Mobile View",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Mobile",
+        "label": "Max Image for Small Tablet View",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Tablet",
+        "label": "Max Image for Tablet View",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Laptop",
+        "label": "Max Image for Laptop View",
+        "min": 2,
+        "max": 6,
+        "step": 1,
+        "default": 5
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Desktop",
+        "label": "Max Image for Desktop View",
+        "min": 2,
+        "max": 8,
+        "step": 1,
+        "default": 7
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Instagram Block Style2",
+        "category": "ishi Instagram Block" 
+      }
+    ]
+  }
+{% endschema %}

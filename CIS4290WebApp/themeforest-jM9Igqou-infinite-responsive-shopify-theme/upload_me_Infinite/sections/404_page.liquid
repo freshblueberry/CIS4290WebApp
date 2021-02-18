@@ -1,0 +1,80 @@
+
+<div class="page-width">
+  <div class="row">
+    <div class="empty-page">
+    {% if section.settings.image != blank %}
+      <div class="banner-image col-lg-6 col-md-12">
+        <div class="image-container">
+          <a href="{% if section.settings.button_link != blank %}{{ section.settings.button_link }}{% else %}/{% endif %}">
+            <img
+                 src="{{ section.settings.image | img_url: 'master' }}"
+                 data-sizes="auto"
+                 alt="{{ section.settings.image.alt | escape }}">
+            </a>
+        </div>
+      </div>
+    {% endif %}
+    <div class="empty-page-content col-lg-6 col-md-12 {% if section.settings.image == blank %}empty-page-center{% endif %}">
+       {% if section.settings.hometitle != blank %}
+        <div class="home-title">{{ section.settings.hometitle | escape }}</div>
+       {% endif %}
+       {% if section.settings.subtitle != blank %}
+        <div class="sub-title">{{ section.settings.subtitle | escape }}</div>
+       {% endif %}
+       {% if section.settings.description != blank %}
+         <div class="description">{{ section.settings.description }}</div>
+       {% endif %}
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="btn">
+          {{ section.settings.button_label | escape }}
+        </a>
+        {% endif %}
+      </div>
+        </div>
+   </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "404 Page Not Found",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "hometitle",
+        "label": "Title", 
+        "default": "404"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Sub Title", 
+        "default": "UH OH! You're lost."
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Description", 
+        "default": "The page you are looking for does not exist. How you got here is a mystery. But you can click the button below to go back to the homepage."
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "default": "HOME"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }
+
+     ]
+  }
+{% endschema %}

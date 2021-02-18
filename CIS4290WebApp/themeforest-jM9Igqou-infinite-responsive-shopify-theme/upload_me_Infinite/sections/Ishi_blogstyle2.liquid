@@ -1,0 +1,290 @@
+<div class="smartblog{% if section.settings.blog_background == 'box' %} page-width{% endif %}">
+  <div class="{% if section.settings.blogimage %}blog-image lazy {% elsif section.settings.blogcolor %}blog-color{% endif %}"
+       data-bg="url({{ section.settings.blogimage | img_url: 'master' }})">
+    <div class="ishiblog-space{% if section.settings.blog_background == 'full' %} page-width{% endif %}">
+      <div class="products_block_inner row">
+        <div class="smart-desc">
+          {% if section.settings.main-title != blank %}
+            <div class="section-header text-center">
+              <h2>{{ section.settings.main-title | escape }}</h2>
+            </div>
+          {% endif %}
+        </div>
+
+        {%- assign blog = blogs[section.settings.blog] -%}
+
+        {% unless blog.articles_count == 0 %}
+          <div class="smartblog-carousel-{{ section.id }} owl-carousel slider-with-options owl-theme"
+                data-small="1" 
+                data-mobile="2" 
+                data-tablet="2" 
+                data-laptop="2"  
+                data-desktop="3"
+                data-nav="true"
+                data-rewind="true">
+            {% for article in blog.articles limit: section.settings.post_limit %}
+              <div class="item sds_blog_post">
+                <div class="blog_post">
+                    {% if article.image %}
+                      <div class="article__grid-image-wrapper js news_module_image_holder">
+                        <a href="{{ article.url }}">
+                          <img
+                               class="article__grid-image owl-lazy"
+                               data-src="{{ article.image | img_url: '424x245' }}"
+                               data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                               data-sizes="auto"
+                               alt="{{ article.image.alt | escape }}">
+                        </a>
+                        <div class="hover-date">
+                          {% if section.settings.blog_show_date %}
+                            <span class="article__date blog_date">
+                              <i class="fa fa-calendar" aria-hidden="true"></i>
+                              <span class="date_month">
+                                 <span class="day_date">{{ article.published_at | date: "%d" }}</span>
+                                <span class="day_month">{{ article.published_at | date: "%B" }}</span>
+                              </span>                           
+                              <span class="day_year">{{ article.published_at | date: "%Y" }}</span>
+                            </span>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <noscript>
+                        <a href="{{ article.url }}" class="article__grid-image-wrapper">
+                          {{ article | img_url: '345x345', scale: 2 | img_tag: article.title, 'article__grid-image' }}
+                        </a>
+                      </noscript>
+                    {% endif %}
+                    <div class="article__grid-meta{% if article.image %} article__grid-meta--has-image{% endif %} blog_content">
+                      <h2 class="h3 article__title sds_post_title">
+                        <a href="{{ article.url }}">{{ article.title | strip_html }}</a>
+                      </h2>
+                      <div class="smartbloginfo">
+                        {% if section.settings.blog_show_author %}
+                          <span class="article__author author">
+                             <i class="fa fa-user" aria-hidden="true"></i>
+                          {{ 'blogs.article.by_author' | t: author: article.author }}</span>
+                        {% endif %}                          
+                        {% if section.settings.blog_show_comment %}
+                        <a href="{{ article.url }}#comments">
+                         <span class="comment">
+                            <i class="fa fa-comment" aria-hidden="true"></i>
+                            {{ 'blogs.comments.comments_with_count' | t: count: article.comments_count }}
+                          </span>
+                          </a>
+                          {% endif %}
+                      </div>
+                      <div class="rte article__grid-excerpt desc">
+                        {% if article.excerpt.size > 0 %}
+                          {{ article.excerpt }}
+                        {% else %}
+                          {{ article.content | strip_html | truncate: 100 }}
+                        {% endif %}
+                      </div>
+                      {% if article.tags.size > 0 %}
+                        <div class="article__tags rte">
+                          {% for tag in article.tags %}
+                            <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="article__grid-tag">{{ tag }}</a>
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                      <ul class="list--inline article__meta-buttons">
+                        <li>
+                          <a href="{{ article.url }}" class="btn btn--secondary btn--small">
+                            {{ 'blogs.article.read_more' | t }}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="grid grid--uniform grid--blog">
+            {% for i in (1..section.settings.post_limit) %}
+              <div class="grid__item medium-up--one-third">
+                <div class="article__grid-meta">
+                  <h2 class="h3 article__title">
+                    <a href="#">{{ 'homepage.onboarding.blog_title' | t }}</a>
+                  </h2>
+
+                  {% if section.settings.blog_show_author %}
+                    <span class="article__author">{{ 'homepage.onboarding.blog_author' | t }}</span>
+                  {% endif %}
+
+                  <div class="rte article__grid-excerpt">
+                    {{ 'homepage.onboarding.blog_excerpt' | t }}
+                  </div>
+
+                  <ul class="list--inline article__meta-buttons">
+                    <li>
+                      <a href="{{ article.url }}" class="btn btn--secondary btn--small">
+                        {{ 'blogs.article.read_more' | t }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endunless %}
+
+        {% if section.settings.show_view_all %}
+          <div class="view-all-btn text-center">
+            <a href="{{ blog.url }}" class="btn">
+              {{ 'blogs.article.view_all' | t }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css"> 
+  .ishi-blog-style2 {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  .ishi-blog-style2 .blog-color{
+  	background-color: {{ section.settings.blogcolor }};
+  }
+  .ishi-blog-style2 .ishiblog-space{
+  	padding: {{ section.settings.blog_topbottom_internal_padding }}px 15px;
+  }
+  @media (max-width: 767px) {
+    .ishi-blog-style2 {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+     .ishi-blog-style2 .ishiblog-space{
+      padding: {{ section.settings.blog_topbottom_internal_padding | divided_by: 2 }}px 15px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Blog Style2",
+    "class": "ishi-blog-style2",
+    "settings": [
+	  {
+        "type": "text",
+        "id": "main-title",
+        "label": "Main Title",
+        "default": "Latest News"
+      },
+	  {
+        "type": "select",
+        "id": "blog_background",
+        "label": "Layout",
+        "default": "full",
+        "options": [
+          { "value": "box", "label": "Box"},
+          { "value": "full", "label": "Full"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Background Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "blogimage",
+        "label": "Image",
+        "info": "Size: 1920px X 850px"
+      },
+      {
+        "type": "color",
+        "id": "blogcolor",
+        "label": "Background Color",
+        "default": "#ffffff"
+      },
+	  {
+        "type": "header",
+        "content": "Section Internal Spacing"
+      },
+      {
+        "type": "range",
+        "id": "blog_topbottom_internal_padding",
+        "min": 0,
+        "max": 200,
+        "step": 20,
+        "label": "Blog Top & Bottom Internal Padding",
+        "default": 0
+      },
+	  {
+        "type": "header",
+        "content": "Section Settings"
+      },
+      {
+        "id": "blog",
+        "type": "blog",
+        "label": "Blog"
+      },
+      {
+        "type": "range",
+        "id": "post_limit",
+        "label": "Posts",
+        "min": 3,
+        "max": 12,
+        "step": 3,
+        "default": 6
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_author",
+        "label": "Show Author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_date",
+        "label": "Show Date",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "blog_show_comment",
+        "label": "Show Comment",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "Show 'View All' Button",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Blog Style2",
+      	"category": "ISHI BLOG POST",
+        "settings": {
+          "blog": "News",
+          "post_limit": 6
+        }
+      }
+    ]
+  }
+{% endschema %}

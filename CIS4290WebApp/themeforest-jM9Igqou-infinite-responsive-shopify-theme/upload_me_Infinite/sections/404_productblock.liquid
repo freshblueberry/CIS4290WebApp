@@ -1,0 +1,88 @@
+{%- assign totalproduct_limit = section.settings.totalproduct_limit -%}
+{% if section.settings.enable != blank %}
+<div class="pnf-product-block page-width">
+    {% if section.settings.title1 != blank %}
+      <div class="section-header text-center">
+        <h2 class="home-title">{{ section.settings.title1 | escape }}</h2>
+      </div>
+    {% endif %}
+    {% assign productType = product.type | handle %}
+      {{ collections[productType].id }}
+      <div class="product-content row">
+              {%- assign collection = collections[section.settings.collection] -%}
+              <div class="grid grid--uniform grid--view-items products-display">
+                {% for product in collection.products limit: totalproduct_limit %}
+                  <div class="item grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                    {% include 'product-card-grid', max_height: max_height %}
+                  </div>
+                {% else %}
+
+                  {% for i in (1..totalproduct_limit) %}
+                    <div class="grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+                      <div class="grid-view-item">
+                        <a href="#" class="grid-view-item__link">
+                          <div class="grid-view-item__image">
+                            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                          </div>
+                          <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                          <div class="grid-view-item__meta">
+                            {% include 'product-price' %}
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}   
+                {% endfor %}
+              </div>
+                {% if section.settings.show_view_all != blank %}
+                <div class="view-all-btn text-center">
+                  <a href="{{ collection.url }}" class="btn">
+                    {{ 'collections.general.view_all' | t }}
+                  </a>
+                </div>
+              {% endif %}
+      </div>
+</div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Products Block",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable",
+        "label": "Enabled?",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title", 
+        "default": "Top Products"
+      },
+      {
+        "type": "range",
+        "id": "totalproduct_limit",
+        "label": "Total Products From Collection",
+        "min": 4,
+        "max": 20,
+        "step": 1,
+        "default": 4
+      }, 
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_view_all",
+        "label": "Show 'View All' Button",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}

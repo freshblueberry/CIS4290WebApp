@@ -1,0 +1,267 @@
+{%- assign totalproduct_limit = section.settings.totalproduct_limit -%}
+{%- assign max_rows = section.settings.max_products_rows | plus: 0 -%}
+<div class="ishiproduct-block page-width">
+    {% if section.settings.title1 != blank %}
+      <div class="section-header text-center">
+        <h2 class="home-title">{{ section.settings.title1 | escape }}</h2>
+      </div>
+    {% endif %}
+    {% if section.settings.title2 != blank %}
+      <div class="subtitle text-center">
+        <p class="home-subtitle">{{ section.settings.title2 | escape }}</p>
+      </div>
+    {% endif %}
+    {% assign productType = product.type | handle %}
+      {{ collections[productType].id }}
+    {% if section.blocks.size > 0 %}
+      <div id="ishiproduct-block-carousel-{{ section.id }}" class="logo-bar{% if section.settings.title_enable %} logo-bar--large{% endif %}">
+        <div class="logo-bar__item{% if section.settings.title_enable %} logo-bar__item--large{% endif %}" {{ block.shopify_attributes }}>
+          <ul id="products-tab-{{ section.id }}" class="nav nav-tabs products-tab clearfix">
+           {% assign blockcount = 1 %} 
+            {% for block in section.blocks %}
+              {% if block.settings.title != blank %}
+                <li class="nav-item {% if forloop.first %}active{% endif %}">
+                    <a  href="#linkproductblock{{blockcount}}-{{ section.id }}" class="nav-link " data-toggle="tab">
+                      {{ block.settings.title | escape }}
+                    </a>
+                </li>
+                {% assign blockcount = blockcount | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="tab-content">
+          {% assign blockcount = 1 %}
+          {% for block in section.blocks %} 
+            {% assign viewalloption = block.settings.show_view_all %}
+            <div class="row tab_content tab-pane {% if forloop.first %}active{% endif %}" id="linkproductblock{{blockcount}}-{{ section.id }}">
+              {%- assign collection = collections[block.settings.collection] -%}
+              {% case block.settings.grid %}
+                {% when 2 %}
+                  {%- assign max_height = 530 -%}
+                  {%- assign grid_item_width = 'medium-up--one-half' -%}
+                {% when 3 %}
+                  {%- assign max_height = 345 -%}
+                  {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+                {% when 4 %}
+                  {%- assign max_height = 250 -%}
+                  {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+                {% when 5 %}
+                  {%- assign max_height = 195 -%}
+                  {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+              {% endcase %}
+              {% assign counter = 1 %}
+              <div class="owl-carousel slider-with-options owl-theme grid grid--uniform grid--view-items products-display productblock{{blockcount}}-{{ section.id }}"
+                   data-small="{{ section.settings.rowproduct_limit_Small }}" 
+                   data-mobile="{{ section.settings.rowproduct_limit_Mobile }}" 
+                   data-tablet="{{ section.settings.rowproduct_limit_Tablet }}" 
+                   data-laptop="{{ section.settings.rowproduct_limit_Laptop }}"  
+                   data-desktop="{{ section.settings.rowproduct_limit_Desktop }}"
+                   data-nav="true"
+                   data-rewind="true"
+                   data-loop="false">
+                {% for product in collection.products limit: totalproduct_limit %}
+                {% capture m %} {{ counter | modulo:max_rows }}{% endcapture %} 
+            
+                {% assign n = m | plus: 0 %}
+                {% if n == 1 %}
+                    <div class="multilevel-item">
+                  {% endif %}
+                  <div class="item grid__item grid__item--{{block.id}} {{ grid_item_width }}">
+                    {% include 'product-card-grid', max_height: max_height %}
+                  </div>
+                  {% if n == 0 and max_rows != 1 %}
+                    </div>
+                  {% endif %}
+                  
+                    {% if forloop.last == true and n == 1 %}
+                </div>
+                    {% endif %}
+                {% assign counter = counter | plus: 1 %}  
+                {% else %}
+
+                  {% for i in (1..totalproduct_limit) %}
+                    <div class="grid__item .grid__item--{{block.id}} {{ grid_item_width }}">
+                      <div class="grid-view-item">
+                        <a href="#" class="grid-view-item__link">
+                          <div class="grid-view-item__image">
+                            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                          </div>
+                          <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                          <div class="grid-view-item__meta">
+                            {% include 'product-price' %}
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                  {% endfor %}   
+                {% endfor %}
+              </div>
+              {% if viewalloption %}
+                <div class="view-all-btn text-center">
+                  <a href="{{ collection.url }}" class="btn">
+                    {{ 'collections.general.view_all' | t }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+            {% assign blockcount = blockcount | plus: 1 %}
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% if section.blocks.size == 0 %}
+      {% include 'no-blocks' %}
+    {% endif %}
+</div>
+
+<style type="text/css">
+  .ishi-product-block {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  @media (max-width: 767px) {
+    .ishi-product-block {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Ishi Products Block",
+    "class": "ishi-product-block",
+    "max_blocks": 20,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title",
+        "default": "Trending Product"
+      },
+      {
+        "type": "text",
+        "id": "title2",
+        "label": "Sub Title",
+        "default": "Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore"
+      },
+      {
+        "type": "range",
+        "id": "totalproduct_limit",
+        "label": "Total Products From Collection",
+        "min": 8,
+        "max": 20,
+        "step": 1,
+        "default": 12
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Small",
+        "label": "Max Products Columns For Mobile View",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Mobile",
+        "label": "Max Products Columns For Small Tablet View",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Tablet",
+        "label": "Max Products Columns For Tablet View",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Laptop",
+        "label": "Max Products Columns For Laptop View",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "rowproduct_limit_Desktop",
+        "label": "Max Products columns for Desktop View",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "default": 4
+      },
+      {
+        "type": "select",
+        "id": "max_products_rows",
+        "label": "Row",
+        "default": "1",
+        "options": [
+          { "value": "1", "label": "1"},
+          { "value": "2", "label": "2"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Products Block",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Product Tab Title"
+          },
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "Collection"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_view_all",
+            "label": "Show 'View All' Button",
+            "default": false
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Products Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}

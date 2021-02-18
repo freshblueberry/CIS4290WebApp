@@ -1,0 +1,111 @@
+{% if section.settings.enable != blank %}
+<div class="page-width">
+    <div class="row">
+    {% if section.settings.title1 != blank %}
+      <div class="section-header text-center">
+        <h2 class="home-title">{{ section.settings.title1 | escape }}</h2>
+      </div>
+    {% endif %}
+  <div class="grid grid--uniform">
+        <div class="grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+          {%- assign collection = collections[section.settings.collection1] -%}
+          {%- assign collectionimage = section.settings.collectionimage1 -%}
+          {% include 'collection-grid-item', collection_image_size: image_size %} 
+        </div>
+        <div class="grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+          {%- assign collection = collections[section.settings.collection2] -%}
+            {%- assign collectionimage = section.settings.collectionimage2 -%}
+          {% include 'collection-grid-item', collection_image_size: image_size %}
+        </div>
+        <div class="grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+          {%- assign collection = collections[section.settings.collection3] -%}
+                {%- assign collectionimage = section.settings.collectionimage3 -%}
+          {% include 'collection-grid-item', collection_image_size: image_size %}
+        </div>
+        <div class="grid__item col-lg-3 col-md-4 col-sm-6 col-xs-6">
+          {%- assign collection = collections[section.settings.collection4] -%}
+                {%- assign collectionimage = section.settings.collectionimage4 -%}
+          {% include 'collection-grid-item', collection_image_size: image_size %}
+        </div>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Collections Block",
+    "class": "index-section",
+    "settings": [
+       {
+        "type": "checkbox",
+        "id": "enable",
+        "label": "Enabled?",
+        "default": true
+       },
+       {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title", 
+        "default": "Top Collection"
+       },
+       {
+        "type": "header",
+        "content": "Collection Block1"
+       },
+       {
+          "type": "image_picker",
+          "id": "collectionimage1",
+          "label": "Image"
+       },
+       {
+          "label": "Collection",
+          "id": "collection1",
+          "type": "collection"
+       },
+       {
+        "type": "header",
+        "content": "Collection Block2"
+       },
+       {
+          "type": "image_picker",
+          "id": "collectionimage2",
+          "label": "Image"
+       },
+       {
+          "label": "Collection",
+          "id": "collection2",
+          "type": "collection"
+       },
+       {
+        "type": "header",
+        "content": "Collection Block3"
+       },
+       {
+          "type": "image_picker",
+          "id": "collectionimage3",
+          "label": "Image"
+       },
+       {
+          "label": "Collection",
+          "id": "collection3",
+          "type": "collection"
+       },
+       {
+        "type": "header",
+        "content": "Collection Block4"
+       },
+       {
+          "type": "image_picker",
+          "id": "collectionimage4",
+          "label": "Image"
+       },
+       {
+          "label": "Collection",
+          "id": "collection4",
+          "type": "collection"
+       }
+
+    ]
+  }
+{% endschema %}

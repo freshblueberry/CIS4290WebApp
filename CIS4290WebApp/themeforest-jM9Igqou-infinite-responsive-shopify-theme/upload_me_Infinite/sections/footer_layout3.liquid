@@ -1,0 +1,476 @@
+{%- assign social_icons = false -%}
+
+{% if
+  settings.social_twitter_link != blank
+  or settings.social_facebook_link != blank
+  or settings.social_pinterest_link != blank
+  or settings.social_instagram_link != blank
+  or settings.social_tumblr_link != blank
+  or settings.social_snapchat_link != blank
+  or settings.social_youtube_link != blank
+  or settings.social_vimeo_link != blank
+  or template.name == 'article'
+  or template.name == 'blog'
+%}
+  {%- assign social_icons = true -%}
+{% endif %}
+ 
+ <footer class="site-footer {% if section.settings.footerimage %}footerimage lazy{% else %}footer-color {% endif %}"
+         data-bg="url({{ section.settings.footerimage | img_url: 'master' }})">
+    <div class="footer-container">
+      <div class="page-width">
+        <div class="row">
+          {% if section.settings.show_contact or section.settings.show_address or section.settings.show_email %} 
+            <div class="footer-content contact-info col-md-4 col-xs-12 footer-block">
+                <div id="contact-info-container1" class="contact-info-inner">
+                  <div class="section-header text-center contact-information hidden-lg-down">
+                    {% if section.settings.contact-title != blank %}
+                      <h2 class="contact-title">{{ section.settings.contact-title }}</h2>
+                    {% endif %}
+                  </div>
+                  <ul class="site-footer__linklist">
+                    {% if section.settings.show_contact and shop.phone != blank %}
+                      <li class="site-footer__linklist-item shop-contact">
+                        <div class="storeicon hidden-lg-down">{% include 'icons' with 'contacticon' %}</div>
+                        <div class="storeicon hidden-lg-up">{% include 'icons' with 'contact-icon' %}</div>
+                        <div class="content">
+                          <a href="/">
+                            {{shop.phone}}
+                          </a>
+                        </div>
+                      </li>
+                    {% endif %}
+                    {% if section.settings.show_address and shop.address != blank %}
+                      <li class="site-footer__linklist-item shop-address">
+                        <div class="storeicon">{% include 'icons' with 'location' %}</div>
+                        <div class="content">
+                          <p>{{shop.address.street | escape }}</p>
+                          <p>{{shop.address.country}}</p>
+                        </div>
+                      </li>                  
+                    {% endif %}
+                    {% if section.settings.show_email and shop.email != blank %}
+                      <li class="site-footer__linklist-item shop-email">
+                        <div class="storeicon">{% include 'icons' with 'email' %}</div>
+                        <div class="content">
+                          <a href="mailto:{{shop.email}}">
+                          {{shop.email}}
+                          </a>  
+                        </div>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </div>
+            </div>
+          {% endif %}
+            <div class="footer-content store-info-block footer-block {% if section.settings.show_contact or section.settings.show_address or section.settings.show_email %}col-md-4 col-sm-12 col-xs-12 {% else %}col-md-6 col-sm-12 col-xs-12{% endif %}">
+              <div id="ishistoreinfo-container" class="ishistoreinfo-inner">
+                <div class="store-img">
+                  {% capture image_layout %}
+                  <div class="feature-row__item">
+                    {% if section.settings.image != blank %}
+                    <div class="feature-row__image-wrapper js">
+                      <div class="img-block">
+                        <a href="/">
+                          <img 
+                          class="feature-row__image lazyload"
+                          src="{{ section.settings.image | img_url: '165x49' }}"
+                          data-src="{{ img_url }}"
+                          data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                          data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+                          data-sizes="auto"
+                          alt="{{ section.settings.image.alt | escape }}">
+                        </a>
+                      </div>
+                    </div>
+                    <noscript>
+                      {{ section.settings.image | img_url: '600x600', scale: 2 | img_tag: section.settings.image.alt, 'feature-row__image' }}
+                    </noscript>
+                    {% else %}
+                      <a class="site-header__logo-link logo-text" href="/" itemprop="url">{{ shop.name }}</a>
+                    {% endif %}
+                  </div>
+                  {% endcapture %}
+                  {{ image_layout }}
+                </div>
+                <div class="account-info-inner">
+                  {%- assign footer_linklist_one = section.settings.footer_linklist_one -%}
+                  {% if linklists[footer_linklist_one].links.size > 0 %}
+                    <ul class="site-footer__linklist">
+                      {% for link in linklists[footer_linklist_one].links %}
+                        <li class="site-footer__linklist-item">
+                          <a href="{{ link.url }}">{{ link.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+                {% if section.settings.show_payment %} 
+                    <div id="_desktop_payment">
+                      <div class="payment-icons">
+                    <div class="logo-bar">
+                      {% if section.settings.show_visa %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'visa' %} 
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if section.settings.show_paypal %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'paypal' %} 
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if section.settings.show_mastercard %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'mastercard' %} 
+                        </div>
+                      </div>
+                      {% endif %}
+                      {% if section.settings.show_discover %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'discover' %} 
+                        </div>
+                      </div>
+                       {% endif %}
+                      {% if section.settings.show_americanexpress %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'americanexpress' %} 
+                        </div>
+                      </div>
+                       {% endif %}
+                      {% if section.settings.show_googlewallet %}
+                      <div class="logo-bar__item">
+                        <div class="logo-bar__link">
+                         {% include 'icons' with 'googlewallet' %} 
+                        </div>
+                      </div>
+                      {% endif %}
+                     {% if section.blocks.size > 0 %}
+                      {% for block in section.blocks %}
+                        <div class="logo-bar__item" {{ block.shopify_attributes }}>
+                            <div class="logo-bar__link">
+                          {% if block.settings.image != blank %}
+                              <img class="logo-bar__image lazy"
+                                   data-src="{{ block.settings.image | img_url: '44x30', scale: 2}}"
+                                   alt="block.settings.image.alt">
+                          {% endif %}
+                            </div>
+                        </div>
+                      {% endfor %}
+                     {% endif %}
+                    </div>
+ </div>
+                    </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="footer-content newletter-social footer-block {% if section.settings.show_contact or section.settings.show_address or section.settings.show_email %}col-md-4 col-sm-12 col-xs-12 {% else %}col-md-6 col-sm-12 col-xs-12{% endif %}">
+              <div id="newsletter-social" class="newsletter-social">
+                <div id="newsletter-container" class="block_newsletter newsletter-inner">
+                  <div class="newsletter_text">
+                    
+                    {% if section.settings.newsletter-title != blank %}
+                      <div class="section-header text-center">
+                        <h2>{% include 'icons' with 'mail' %}{{ section.settings.newsletter-title | escape }}</h2>
+                      </div>
+                    {% endif %} 
+                  </div>
+                  <div class="site-footer__newsletter">
+                    {% form 'customer' %}
+                      {% if form.posted_successfully? %}
+                        <p class="form--success alert alert-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                      {% else %}
+                        <div class="input-group">
+                          <input type="hidden" name="contact[tags]" value="newsletter">
+                          <input type="email"
+                            name="contact[email]"
+                            id="Email"
+                            class="input-group__field newsletter__input"
+                            value="{% if customer %}{{ customer.email }}{% endif %}"
+                            placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                            autocapitalize="off">
+                          <span class="input-group__btn">
+                            <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+                              <span class="newsletter__submit-text--large">{{ 'general.newsletter_form.submit' | t }}
+                                </span>
+                            </button>
+                          </span>
+                        </div>
+                      {% endif %}
+                      {{ form.errors | default_errors }}
+                    {% endform %}
+                  </div>
+                </div>
+                {% if section.settings.show_social %}
+                  <div class="follow-us">
+                    <div id="social-icon-container" class="social-icon-inner">
+                      <div class="social-media-blocks">
+                        {% if social_icons %}
+                          <div class="social-icon-inner">
+                            <div class="header-social">
+                              <ul class="list--inline site-footer__social-icons social-icons">
+                                {% if settings.social_facebook_link != blank %}
+                                  <li class="facebook">
+                                    <a class="social-icons__link" href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}" target="_blank">
+                                      <i class="fa fa-facebook" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.facebook' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_twitter_link != blank %}
+                                  <li class="twitter">
+                                    <a class="social-icons__link" href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}" target="_blank">
+                                      <i class="fa fa-twitter" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.twitter' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_pinterest_link != blank %}
+                                  <li class="pinterest">
+                                    <a class="social-icons__link" href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}" target="_blank">
+                                      <i class="fa fa-pinterest-p" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.pinterest' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_instagram_link != blank %}
+                                  <li class="instagram">
+                                    <a class="social-icons__link" href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}" target="_blank">
+                                      <i class="fa fa-instagram" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.instagram' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_tumblr_link != blank %}
+                                  <li class="tumblr">
+                                    <a class="social-icons__link" href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}" target="_blank">
+                                      <i class="fa fa-tumblr" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.tumblr' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_snapchat_link != blank %}
+                                  <li class="snapchat">
+                                    <a class="social-icons__link" href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}" target="_blank">
+                                      <i class="fa fa-snapchat-ghost" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.snapchat' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_youtube_link != blank %}
+                                  <li class="youtube">
+                                    <a class="social-icons__link" href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}" target="_blank">
+                                      <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.youtube' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if settings.social_vimeo_link != blank %}
+                                  <li class="vimeo">
+                                    <a class="social-icons__link" href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}" target="_blank">
+                                      <i class="fa fa-vimeo" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.vimeo' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                                {% if template.name == 'blog' or template.name == 'article' %}
+                                  <li class="rss">
+                                    <a class="social-icons__link" href="{{ shop.url }}{{ blog.url }}.atom" target="_blank">
+                                      <i class="fa fa-rss" aria-hidden="true"></i>
+                                      <span class="icon__-text">{{ 'general.social.rss' | t }}</span>
+                                    </a>
+                                  </li>
+                                {% endif %}
+                              </ul>
+                            </div>
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+                <div id="_mobile_payment"></div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="page-width">
+        <div class="row">
+          {% if section.settings.copyright != blank %}
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="site-footer__copyright--bottom">
+             {{ section.settings.copyright }}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>   
+    </div>
+</footer>
+
+
+{% schema %}
+  {
+    "name": "Footer Layout3",
+    "class": "footer-layout3",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Footer Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "footerimage",
+        "label": "Background Image",
+        "info": "Size: 1920px X 850px"
+      },
+      {
+        "type": "header",
+        "content": "Contact Information setting"
+      },
+      {
+        "type": "text",
+        "id": "contact-title",
+        "label": "Title",
+        "default": "Contact Us"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_email",
+        "label": "Show Email ID",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_address",
+        "label": "Show Address",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_contact",
+        "label": "Show Contact",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Store information setting"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Store Logo",
+        "info": "Size: 165px X 49px"
+      },
+      {
+        "type": "header",
+        "content": "Your Account Setting"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_linklist_one",
+        "label": "Footer-Link",
+        "default": "main-menu"
+      },
+      {
+        "type": "header",
+        "content": "newsletter setting"
+      },
+      {
+        "type": "text",
+        "id": "newsletter-title",
+        "label": "Title",
+        "default": "Newsletter"
+      },
+      {
+        "type": "header",
+        "content": "Social setting"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show Social",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Copyright setting"
+      },
+      {
+        "type": "text",
+        "id": "copyright",
+        "label": "Copyright Text",
+        "default": "<p>© 2021, Infinite Sectioned Shopify Theme Powered by Shopify</p>"
+      },
+      {
+        "type": "header",
+        "content": "Payment setting"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment",
+        "label": "Show Payment Block",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_visa",
+        "label": "Show Visa Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_paypal",
+        "label": "Show PayPal Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_mastercard",
+        "label": "Show MasterCard Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_discover",
+        "label": "Show Discover Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_americanexpress",
+        "label": "Show AmericanExpress Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_googlewallet",
+        "label": "Show GoogleWallet Icon",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Payment Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Payment Logo Image",
+            "info": "Size: 44px X 30px"
+          }
+        ]
+      }
+    ]
+  }
+
+{% endschema %}

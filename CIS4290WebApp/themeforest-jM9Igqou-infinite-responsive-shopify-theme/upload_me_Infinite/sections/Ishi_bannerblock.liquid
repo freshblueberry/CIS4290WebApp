@@ -1,0 +1,199 @@
+<div class="ishibannerwithouttext {% if section.settings.banner_layout == 'box' %}page-width{% endif %}">
+     {% if section.blocks.size > 0 %}
+        <div class="ishibannerwithouttext_grid">
+          {% for block in section.blocks %}
+          <div class="ishibannerwithouttext-container 
+            {% if section.settings.banner_columns == '1' %} col-md-12 col-sm-12 col-xs-12 one-column
+            {% elsif section.settings.banner_columns == '2' %} col-md-6 col-sm-6 col-xs-6 two-column
+            {% elsif section.settings.banner_columns == '3' %} col-md-4 col-sm-6 col-xs-6 three-column
+            {% elsif section.settings.banner_columns == '4' %} col-md-3 col-sm-4 col-xs-6 four-column
+            {% elsif section.settings.banner_columns == '5' %} five-column
+            {% elsif section.settings.banner_columns == '6' %} col-md-2 col-sm-4 col-xs-6 six-column
+            {% endif %}">
+            <div class="image-container">
+              {% if block.settings.image != blank %}
+              <a class="ishi-customhover-{{ block.settings.bannerhover }} {% if block.settings.banner_scale_enable %}scale{% endif %}" href="{% if block.settings.banner_link != blank %}{{ block.settings.banner_link }}{% else %}/{% endif %}">
+              <img 
+                 src="{{ block.settings.image | img_url: '666x300' }}"
+                 data-widths="[666]"
+                 data-sizes="auto" 
+                 alt="{{ block.settings.image.alt | escape }}">
+              </a>
+                 {% else %}
+                  <a href="/">
+                    <img 
+                         src="https://via.placeholder.com/666x300/f1f2f3.png?text=Size :666px X 300px"
+                         data-src="https://via.placeholder.com/666x300/f1f2f3.png?text=Size : 666px X 300px"
+                         data-widths="[666]"
+                         data-sizes="auto"
+                         alt="placeholder">
+              	  </a>
+                {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<style type="text/css">
+  .banner-without-text-section {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  .banner-without-text-section .ishibannerwithouttext-container {
+    padding: 0 {{ section.settings.banner_leftright_internal_padding | divided_by: 2 }}px;
+    margin-bottom: {{ section.settings.banner_leftright_internal_padding }}px;
+  }
+   .banner-without-text-section .ishibannerwithouttext_grid{
+    margin: 0 -{{ section.settings.banner_leftright_internal_padding | divided_by: 2 }}px;
+  }
+  .banner-without-text-section .five-column{
+    width: 20%;
+    float: left;
+  }
+  @media (max-width: 1199px) {
+    .banner-without-text-section .five-column{
+      width: 25%;
+    }
+  }
+  @media (min-width: 992px) and (max-width: 1199px){
+    .banner-without-text-section .six-column{
+      width: 25%;
+    }
+  }
+  @media (max-width: 991px) {
+    .banner-without-text-section .five-column{
+      width: 33.33%;
+    }
+  }
+  @media (max-width: 767px) {
+    .banner-without-text-section {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+    .banner-without-text-section .five-column{
+      width: 50%;
+    }
+  }
+</style>
+
+{% schema %}
+  {
+    "name": "Ishi Banner Block",
+    "class": "banner-without-text-section",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Banner Settings"
+      },
+      {
+        "type": "select",
+        "id": "banner_layout",
+        "label": "Layout",
+        "default": "box",
+        "options": [
+          { "value": "box", "label": "Box"},
+          { "value": "full", "label": "Full"}
+        ]
+      },
+      {
+        "type": "select",
+        "id": "banner_columns",
+        "label": "Select Number Of Columns",
+        "default": "2",
+        "options": [
+          { "value": "1", "label": "One"},
+          { "value": "2", "label": "Two"},
+          { "value": "3", "label": "Three"},
+          { "value": "4", "label": "Four"},
+          { "value": "5", "label": "Five"},
+          { "value": "6", "label": "Six"}
+        ]
+      },
+      {
+        "type": "range",
+        "id": "banner_leftright_internal_padding",
+        "label": "Banner Left & Right Internal Spacing/Padding",
+        "min": 0,
+        "max": 30,
+        "step": 5,
+        "default": 30
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range", 
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0, 
+        "max": 50,
+        "step": 10, 
+        "default": 0
+      }
+    ],
+    "blocks": [ 
+      { 
+        "type": "image",
+        "name": "Banner",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "checkbox",
+            "id": "banner_scale_enable",
+            "label": "Scale Banner",
+            "default": false
+          },
+          {
+            "type": "select",
+            "id": "bannerhover",
+            "label": "Hover",
+			"default": "fadeinrotate3D",
+            "options": [
+              { "value": "fadeinnormal", "label": "FadeIn Normal"},
+              { "value": "fadeinflip", "label": "FadeIn Flip"},
+              { "value": "fadeinrotate", "label": "FadeIn Rotate"},
+              { "value": "fadeinrotate3D", "label": "FadeIn Rotate3D"},
+              { "value": "fadeintop", "label": "FadeIn Top"},
+              { "value": "fadeinbottom", "label": "FadeIn Bottom"},
+              { "value": "fadeintopbottom", "label": "FadeIn Top Bottom"},
+              { "value": "fadeoutcenter", "label": "FadeOut Center"},
+              { "value": "fadeinoutbordercorner", "label": "FadeInOut BorderCorner"},
+              { "value": "doublefadeincenter", "label": "Double FadeInOut Center"},
+              { "value": "fadeinoutsingle", "label": "FadeInOut Single Scroll"},
+              { "value": "fadeinoutdoublevertical", "label": "FadeInOut Double Scroll"},
+              { "value": "perspective", "label": "Perspective"},
+              { "value": "fadeinoutrotatevertical", "label": "FadeInOut Rotate Vertical"}
+            ]
+          },
+          {
+            "type": "url",
+            "id": "banner_link",
+            "label": "Link"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Banner Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}
+
+   

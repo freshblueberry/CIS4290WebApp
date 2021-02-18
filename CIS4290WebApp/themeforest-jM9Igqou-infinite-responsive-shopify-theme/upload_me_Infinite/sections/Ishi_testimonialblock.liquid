@@ -1,0 +1,249 @@
+<div class="ishitestimonial {% if section.settings.test_background == 'box' %}page-width{% endif %}">
+  <div class="testimonial-background">
+    <div class="{% if section.settings.testimonialimage %}testimonialimage lazy{% else %} testimonial{% endif %}"
+         data-bg="url({{ section.settings.testimonialimage | img_url: 'master' }})">
+      
+        <div id="ishitestimonial-space" {% if section.settings.test_background == 'full' %}class="page-width"{% endif %}>
+          <div class="testimonial-width">
+            {% if section.settings.title != blank %} 
+              <div class="section-header">
+                <h2 class="home-title">{{ section.settings.title | escape }}</h2>
+              </div>
+            {% endif %}
+            {% if section.blocks.size > 0 %}
+              <div id="ishitestimonials-carousel" class="ishitestimonials-carousel-{{ section.id }} owl-carousel slider-with-options owl-theme"
+                   data-small="1" 
+                   data-mobile="1" 
+                   data-tablet="1" 
+                   data-laptop="1"  
+                   data-desktop="1"
+                   data-nav="true"
+                   data-autoplay="true"
+                   data-autoplaytimeout="4000"
+                   data-rewind="true"
+                   data-dots="false">
+                {% for block in section.blocks %}
+                  <div class="ishitestimonials-container">
+                    
+                    <div class="user-container">
+
+
+                      <div class="user-info">
+                        {% if block.settings.text != blank %}
+                          <div class="user-description">{{ block.settings.text }}</div>
+                        {% endif %}
+                      </div>
+
+
+                      <div class="desc">
+                        {% if block.settings.title != blank %}
+                          <h3 class="user-name">{{ block.settings.title | escape }}</h3>
+                        {% endif %}
+                        {% if block.settings.subtitle != blank %}
+                          <h3 class="user-designation">{{ block.settings.subtitle | escape }}</h3>
+                        {% endif %}
+
+                      </div>
+                      <div class="testimonial-img">
+                        {% if block.settings.image != blank %}
+                          <img 
+                               class="lazy owl-lazy"
+                               data-src="{{ block.settings.image | img_url: '150x150' }}"
+                               data-widths="[150, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                               data-sizes="auto"
+                               alt="{{ block.settings.image.alt | escape }}" width="150" height="150">
+                          <noscript>
+                            <p>
+                              {{ block.settings.image | img_url: '480x480', scale: 2 | img_tag: block.settings.image.alt, 'feature-row__image' }}
+                            </p>
+                          </noscript>
+                        {% else %}
+                          <p>
+                            <img 
+                               src="https://via.placeholder.com/150x150/f1f2f3.png?text=Size : 150px X 150px"
+                               data-src="https://via.placeholder.com/150x150/f1f2f3.png?text=Size : 150px X 150px"
+                               data-widths="[150]"
+                               data-sizes="auto"
+                               alt="placeholder">
+                          </p>
+                        {% endif %}
+                    </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% if section.blocks.size == 0 %}
+            {% include 'no-blocks' %}
+          {% endif %}
+        </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  
+  .ishitestimonial-block .testimonial{
+    background:{{ section.settings.testimonial_background }};
+  }
+  .ishitestimonial-block {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  .ishitestimonial-block .section-header > h2,
+  .ishitestimonial-block .desc .user-name{
+    color:{{ section.settings.testimonial_textcolor1 }};
+  }
+  .ishitestimonial-block .user-info .user-description p,
+  .ishitestimonial-block .desc .user-designation{
+    color:{{ section.settings.testimonial_textcolor2 }};
+  }
+  .ishitestimonial-block #ishitestimonial-space{
+    padding-top:{{ section.settings.space }}px;
+    padding-bottom:{{ section.settings.space }}px;
+  }
+  @media (max-width: 767px) {
+    .ishitestimonial-block {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+    .ishitestimonial-block #ishitestimonial-space{
+      padding-top:{{ section.settings.space | divided_by: 2 }}px;
+      padding-bottom:{{ section.settings.space | divided_by: 2 }}px;
+    }
+  }
+</style>
+
+
+{% schema %}
+  {
+    "name": "Ishi Testimonial Block",
+    "class": "ishitestimonial-block",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Testimonial Setting"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Main Title",
+        "default": "Client Say"
+      },
+      {
+        "type": "select",
+        "id": "test_background",
+        "label": "Layout",
+        "default": "full",
+        "options": [
+          { "value": "box", "label": "Box"},
+          { "value": "full", "label": "Full"}
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "testimonialimage",
+        "label": "Background Image",
+        "info": "Size: 1920px X 650px"
+      },
+      {
+        "type": "color",
+        "id": "testimonial_background",
+        "label": "Background Color",
+        "default": "#f5f5f5"
+      },
+      {
+        "type": "color",
+        "id": "testimonial_textcolor1",
+        "label": "Text Color1",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "testimonial_textcolor2",
+        "label": "Text Color2",
+        "default": "#666"
+      },
+      {
+        "type": "range",
+        "id": "space",
+        "min": 0,
+        "max": 200,
+        "step": 10,
+        "label": "Internal Box Space/Padding",
+        "default": 70
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+      
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image",
+            "info": "Size: 150px X 150px"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Name",
+            "default": "LUIES CHARLS"
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Profession",
+            "default": "Web Designer"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Sed vitae placerat velit, non semper nib Mae cenas pharetra risus vitae sodalesLorem ipsum dolor sit amet conse ctetur adipisicing elit.</p>"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Testimonial Block",
+        "category": "ishi themes",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

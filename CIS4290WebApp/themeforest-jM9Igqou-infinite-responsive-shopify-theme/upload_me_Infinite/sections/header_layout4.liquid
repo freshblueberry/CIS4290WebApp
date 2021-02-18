@@ -1,0 +1,221 @@
+
+
+{% if section.settings.message %}
+<style>
+.notification-bar {
+  background-color: {{ section.settings.color_bg }};
+}
+
+.notification-bar__message {
+  color: {{ section.settings.color_text }};
+}
+
+{% if section.settings.logo != blank %}
+.site-header__logo-image {
+  max-width: {{ section.settings.logo_max_width | escape }}px;
+}
+{% endif %}
+
+</style>
+{% endif %}
+
+
+<div id="header" data-section-id="{{ section.id }}" data-section-type="header-section">
+  <header class="site-header">
+        <div class="page-width">
+          <div class="row">
+          <div class="header-top site-header-inner">
+            <div id="_desktop_search" class="site-header__search hidden-lg-down col-md-4">
+              {% include 'search-form' %}
+            </div>
+            <div class="header-logo-section  col-md-4 col-sm-6 col-xs-6">
+               {% comment %}
+                    Use the uploaded logo from theme settings if enabled.
+                    Site name gets precedence with H1 tag on homepage, div on other pages.
+                    {% endcomment %}
+                    {% if template.name == 'index' %}
+                    <h1 class="h2 header__logo" itemscope itemtype="http://schema.org/Organization">
+                      {% else %}
+                      <div class="h2 header__logo" itemscope itemtype="http://schema.org/Organization">
+                        {% endif %}
+                        {% if section.settings.logo %}
+                        <a href="/" itemprop="url" class="header__logo-image">
+                          {% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+                          {% capture logo_alt %}{{ section.settings.logo.alt | default: shop.name }}{% endcapture %}                
+                          <img src="{{ section.settings.logo | img_url: 'large' }}"
+                          alt="{{ logo_alt | escape }}"
+                          itemprop="logo" style="max-width: 100%;width: {{ section.settings.logo_max_width }}px;">
+                        </a>
+                        {% else %}
+                        <a class="site-header__logo-link" href="/" itemprop="url">{{ shop.name }}</a>
+                        {% endif %}
+                        {% if template.name == 'index' %}
+                      </h1>
+                      {% else %}
+            </div>
+             {% endif %}
+            </div>
+            <div class="header-right col-md-4 col-sm-6 col-xs-6">
+              {% if section.settings.show_mail and shop.email != blank %} 
+              <div id="ishiheadercontactblock">
+                <div class="call">
+                  <div class="call-img">{% include 'icons' with 'email' %} </div> 
+                  <span class="call-text-title">
+                    <span class="main-title">{{  section.settings.mail-title }}</span>
+                    <span class="call-num">{{shop.email}}</span>
+                  </span>
+                </div>
+              </div>
+              {% endif %}
+
+              <div id= "_desktop_cart" class="hidden-lg-down ">
+                {% include 'desktop-cart' %}
+              </div>
+            </div>
+            <div id="mobile_top_menu_wrapper" class="hidden-lg-up" style="display:none;">
+              <div id="top_menu_closer" class="hidden-lg-up">
+                <i class="material-icons"></i>
+              </div>
+              <div  id="_mobile_top_menu" class="js-top-menu mobile"></div>
+            </div>
+            <div class="mobile-menu-overlay hidden-lg-up"></div>
+      	  </div>
+          </div>
+    	</div>
+    <div class="mobile-width hidden-lg-up">
+      <div class="page-width">
+        <div class="row">
+          <div class="mobile-width-left">
+            <div id="menu-icon" class="menu-icon hidden-lg-up">
+              {% include 'icons' with 'setup' %}
+            </div>
+          </div>
+          <div class="mobile-width-right">
+            <div id= "_mobile_cart"></div>              
+            <div id= "_mobile_search"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+<div class="move-to-topbar" data-section-type="servicetopbar-service" >
+	<div id="_desktop_service" >
+  <div class="page-width">
+    <div class="row">
+        <div id="ishiservices">
+      {% if section.blocks.size > 0 %}
+        <div class="ishiservices-content">
+          <div class="service-block" id="services-{{ section.id }}">
+              {% for block in section.blocks %} 
+                  <div class="services col-md-3 col-sm-6 col-xs-6">
+                    {% if block.settings.link != blank %}
+                      <a href="{{ block.settings.link }}">
+                    {% endif %}
+                    <div class="service-img-outer">
+                      <div class="service-img">
+                        {% if block.settings.service-image != blank %}
+                            <img
+                               class="lazy"
+                               data-src="{{ block.settings.service-image | img_url: '30x30' }}"
+                               src="{{ block.settings.service-image | img_url: '30x30' }}"
+                               width="30" height="30">
+
+                        {% endif %}
+                      </div>
+                    </div>
+                      <div class="service-text">
+                        <div class="service-title">{{ block.settings.service-title | escape }}</div>
+                         <div class="service-desc">{{ block.settings.service-desc | escape }}</div>
+                      </div> 
+                    {% if block.settings.link != blank %}
+                      </a> 
+                    {% endif %}
+                  </div>
+              {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+      {% if section.blocks.size == 0 %}
+        <div class="placeholder-noblocks">
+          {{ 'homepage.onboarding.no_content' | t }}
+        </div>
+      {% endif %}
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Header Layout4",
+  "class": "header-layout4",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "headertitle",
+      "label": "Announcement Bar",
+      "default": "Hello Customer Big Discount Today!"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Theme Logo Image",
+      "info": "Size: 165px X 49px"
+    },
+    {
+      "type": "text",
+      "id": "logo_max_width",
+      "label": "Max Logo Width",
+      "default": "165",
+      "info": "Defined in pixels. Do not add the 'px' unit."
+    },
+    {
+      "type": "text",
+      "id": "mail-title",
+      "label": "Mail Title",
+      "default": "MAIL US"
+    }, 
+    {
+      "type": "checkbox",
+      "id": "show_mail",
+      "label": "Show Mail",
+      "default": true
+    }
+  ],
+  "blocks": [
+      { 
+        "type": "image",
+        "name": "Service",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "service-image",
+            "label": "Image",
+            "info": "Size: 30px X 30px"
+          },
+          {
+            "type": "text",
+            "id": "service-title",
+            "label": "Title",
+            "default": "Service Title"
+          },
+          {
+            "type": "text",
+            "id": "service-desc",
+            "label": "Sub Title",
+            "default": "Service Sub-Title"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link" 
+          }
+        ]
+      }
+    ]
+}
+{% endschema %}

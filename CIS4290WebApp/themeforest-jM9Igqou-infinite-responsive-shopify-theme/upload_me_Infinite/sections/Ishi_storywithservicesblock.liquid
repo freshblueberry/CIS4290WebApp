@@ -1,0 +1,205 @@
+<div class="ishistory-servicesblock">
+    <div class="page-width">
+      <div class="row valign-wrapper">
+          <div class="story-image-wrapper banner-image-{{section.settings.banner_position}} col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="image-wrapper">
+                {% if section.settings.image != blank %}
+                <img 
+                   src="{{ section.settings.image | img_url: '666x580' }}"
+                   data-widths="[666]"
+                   data-sizes="auto"
+                   alt="{{ section.settings.image.alt | escape }}">
+                  {% else %}
+                     <img 
+                   src="https://via.placeholder.com/666x580/f1f2f3.png?text=Size : 666px X 580px"
+                   data-src="https://via.placeholder.com/666x580/f1f2f3.png?text=Size : 666px X 580px"
+                   data-widths="[666]"
+                   data-sizes="auto"
+                   alt="placeholder">
+                  {% endif %}                
+            </div>
+          </div>
+          <div class="text-wrapper banner-text-{{section.settings.banner_position}} col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <div class="story-text-block">
+                {% if section.settings.headertitle != blank %}
+                  <div class="title">{{ section.settings.headertitle }}</div>
+                {% endif %}
+                {% if section.settings.text != blank %}
+                  <div class="description">{{ section.settings.text }}</div>
+                {% endif %}
+                {% if section.blocks.size > 0 %}
+                <div class="ishiservices">
+                  <div class="ishiservices-content">
+                    <div class="service-block row">
+                        {% for block in section.blocks %} 
+                            <div class="services col-md-6 col-sm-6 col-xs-6">
+                              {% if block.settings.link != blank %}
+                                <a href="{{ block.settings.link }}">
+                              {% endif %}
+                              <div class="service-img-outer">
+                                <div class="service-img">
+                                  {% if block.settings.service-image != blank %}
+                                    {{ block.settings.service-image | img_tag: block.settings.service-image.alt}}
+                                  {% endif %}
+                                </div>
+                              </div>
+                                <div class="service-text">
+                                {% if block.settings.service-title != blank %}
+                                  <div class="service-title">{{ block.settings.service-title | escape }}</div>
+                                  {% endif %}
+                                  {% if block.settings.service-desc != blank %}
+                                   <div class="service-desc">{{ block.settings.service-desc | escape }}</div>
+                                   {% endif %}
+                                </div> 
+                              {% if block.settings.link != blank %}
+                                </a>
+                              {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+                  <a href="{{ section.settings.button_link }}" class="btn story-btn">
+                    {{ section.settings.button_label | escape }}
+                  </a>
+                {% endif %}
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+
+<style type="text/css"> 
+  .story-block-style2 {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  
+  .story-block-style2 .banner-image-left{
+    order: 1;
+  }
+  .story-block-style2 .banner-text-left{
+    order: 2;
+  }
+  .story-block-style2 .banner-image-right{
+    order: 2;
+  }
+  .story-block-style2 .banner-text-right{
+    order: 1;
+  }
+  @media (max-width: 767px) {
+    .story-block-style2 {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style> 
+
+{% schema %}
+{
+  "name": "Story + Service Block",
+  "class": "story-block-style2",
+  "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image",
+        "info": "Size: 666px X 580px"
+      },
+	  {
+        "type": "select",
+        "id": "banner_position",
+        "label": "Image Position",
+        "default": "right",
+        "options": [
+          { "value": "left", "label": "Left"},
+          { "value": "right", "label": "Right"}
+        ]
+      },
+      {
+        "type": "text",
+        "id": "headertitle",
+        "label": "Title",
+        "default": "Amazing Cosmetic Shop Confidence Breeds Beauty"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default": "<p>Morbi quis venenatis iaculis pretium vehicula velited nonenimelit. Suspendisse aliquet facilisis purus bibendum. Lorem ipsum sitamet viverra condimentum</p>"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "default": "SHOP NOW"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+  ],
+  "blocks": [
+      { 
+        "type": "image",
+        "name": "Service",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "service-image",
+            "label": "Image",
+            "info": "Size: 30px X 30px"
+          },
+          {
+            "type": "text",
+            "id": "service-title",
+            "label": "Heading",
+            "default": "Service Title"
+          },
+          {
+            "type": "text",
+            "id": "service-desc",
+            "label": "Sub Title",
+            "default": "Lorem Ipsum dummy text"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link" 
+          }
+        ]
+      }
+    ],
+  "presets": [
+    {
+      "name": "Ishi Story + Service Block",
+      "category": "ishi themes"
+    }
+  ]
+}
+
+
+{% endschema %}

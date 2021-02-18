@@ -1,0 +1,319 @@
+
+<!-- {% assign time = "now" | date: "%s" | minus : 18000 | date: "%Y-%m-%d %H:%M %P EST" %} -->
+<!-- from_date: {{  "now" | date: "%Y-%m-%d %H:%M" }}
+timezone: UTC -->
+
+{% comment %} convert our dates to Number of seconds 
+              since 1970-01-01 00:00:00 UTC {% endcomment %}
+{% assign time = 'now' | date: '%s' %}
+{% assign datestart = section.settings.startdate | date: "%s" %}
+
+{% assign dateend = section.settings.enddate |  date: "%s" %}
+{% assign dateendjs = section.settings.enddate |  date: "%F" %}
+{% assign deal = 0 %}
+
+{% if datestart <= time and dateend > time %}
+  {% assign deal = 1 %}
+{% else %}
+ {% assign deal = 0 %}
+{% endif %}
+
+
+
+<div class="ishiparallaxbanner {% if section.settings.parallax_background == 'box' %} page-width{% endif %}">
+  <div class="parallax-block {% if section.settings.parallaximage %}parallax-image lazy {% elsif section.settings.parallaxcolor %} parallax-color{% endif %}"
+       data-counter="{{ dateendjs }}"
+       data-bg="url({{ section.settings.parallaximage | img_url: 'master' }})"
+       data-deal="{{ deal }}"
+       >
+       <div class="ishiparallax-space {% if section.settings.parallax_background == 'full' %}page-width{% endif %}" >
+         <div class="parallax-outer">
+            <div class="parallax-list parallax-text-{{section.settings.parallax_text_position}}">
+              {% if section.settings.offer != blank %}
+                <div class="parallax-offer">{{ section.settings.offer }}</div>
+              {% endif %}
+              {% if section.settings.main-title != blank %}
+                    <div class="parallax-title">{{ section.settings.main-title }}</div>
+              {% endif %}
+              {% if section.settings.subtitle != blank %}
+                <div class="parallax-subtitle"> {{ section.settings.subtitle }} </div>
+              {% endif %}
+              <div id="parallaxcountdown">
+                  <div class="countdown-days countdown">
+                      <div class="data"></div>
+                      <div class="text">{{ 'general.counter.days' | t }}</div>
+                  </div>
+                  <div class="countdown-hours countdown">
+                      <div class="data"></div>
+                      <div class="text">{{ 'general.counter.hours' | t }}</div>
+                  </div>
+                  <div class="countdown-minutes countdown">
+                      <div class="data"></div>
+                      <div class="text">{{ 'general.counter.minutes' | t }}</div>
+                  </div>
+                  <div class="countdown-seconds countdown">
+                      <div class="data"></div>
+                      <div class="text">{{ 'general.counter.seconds' | t }}</div>
+                  </div>
+              </div>  
+              {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+                <a href="{{ section.settings.button_link }}" class="btn theme-button">
+                  {{ section.settings.button_label | escape }}
+                </a>
+              {% endif %}
+            </div>
+        </div>
+       </div>
+  </div>
+</div>
+
+<style type="text/css"> 
+  .parallax-block-with-timer {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  .parallax-block-with-timer .parallax-color{
+    background-color: {{ section.settings.parallaxcolor }};
+  }
+  .parallax-block-with-timer .ishiparallax-space{
+    padding-top: {{ section.settings.parallax_topbottom_internal_padding }}px;
+    padding-bottom: {{ section.settings.parallax_topbottom_internal_padding }}px;
+    display: block;
+    overflow: hidden;
+  }
+  .parallax-block-with-timer .parallax-text-right{
+    float: right;
+  }
+  .parallax-block-with-timer .parallax-text-left{
+    float: left;
+  }
+  .parallax-block-with-timer .parallax-text-center{
+    margin: 0 auto;
+    width: 70%;
+  }
+  .parallax-block-with-timer .parallax-offer {
+    color: {{ section.settings.parallaxtextcolor1 }};
+  }
+  .parallax-block-with-timer .parallax-title,
+  .parallax-block-with-timer .parallax-subtitle{
+    color: {{ section.settings.parallaxtextcolor2 }};
+  }
+  .parallax-block-with-timer #parallaxcountdown .countdown{
+    background: {{ section.settings.countdownbgcolor }};
+  }
+  .parallax-block-with-timer #parallaxcountdown .countdown .data
+  .parallax-block-with-timer #parallaxcountdown .countdown .text{
+    color: {{ section.settings.countdowntextcolor }};
+  }
+  .parallax-block-with-timer #parallaxcountdown .countdown-seconds{
+    background: {{ section.settings.countdownbghovercolor }};
+    border:1px solid {{ section.settings.countdownbghovercolor }} !important;
+  }
+  .parallax-block-with-timer #parallaxcountdown .countdown-seconds .data,
+  .parallax-block-with-timer #parallaxcountdown .countdown-seconds .text{
+     color: {{ section.settings.countdowntexthovercolor }};
+  }
+  
+   @media (min-width: 768px) {
+      .parallax-block-with-timer #parallaxcountdown .countdown:hover{
+         background: {{ section.settings.countdownbghovercolor }};
+        border:1px solid {{ section.settings.countdownbghovercolor }} !important;
+      }
+      .parallax-block-with-timer #parallaxcountdown .countdown:hover .data,
+      .parallax-block-with-timer #parallaxcountdown .countdown:hover .text{
+         color: {{ section.settings.countdowntexthovercolor }};
+      }
+   }
+  @media (max-width: 1199px) {
+    .parallax-block-with-timer .parallax-text-center{ 
+      width: 80%;
+    }  
+  }
+  @media (max-width: 991px) {
+    .parallax-block-with-timer .parallax-text-center{ 
+      width: 100%;
+    }  
+  }
+  @media (max-width: 767px) {
+    .parallax-block-with-timer {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+    .parallax-block-with-timer .ishiparallax-space{
+      padding-top: {{ section.settings.parallax_topbottom_internal_padding | divided_by: 2 }}px;
+      padding-bottom: {{ section.settings.parallax_topbottom_internal_padding | divided_by: 2 }}px;
+    }
+  }
+</style>
+
+
+
+{% schema %}
+  {
+    "name": "Parallax With Timer",
+    "class": "parallax-block-with-timer",
+    "settings": [
+    {
+        "type": "select",
+        "id": "parallax_background",
+        "label": "Layout",
+        "default": "full",
+        "options": [
+          { "value": "box", "label": "Box"},
+          { "value": "full", "label": "Full"}
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Parallax Image Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "parallaximage",
+        "label": "Background Image",
+        "info": "Size: 1920px X 850px"
+      },
+      {
+        "type": "color",
+        "id": "parallaxcolor",
+        "label": "Background Color",
+        "default": "#4dbbe5"
+      },
+      {
+        "type": "color",
+        "id": "parallaxtextcolor1",
+        "label": "Text Color1",
+        "default": "#e00523"
+      },
+      {
+        "type": "color",
+        "id": "parallaxtextcolor2",
+        "label": "Text Color2",
+        "default": "#000"
+      },
+      {
+        "type": "header",
+        "content": "Countdown color Settings"
+      },
+      {
+        "type": "color",
+        "id": "countdownbgcolor",
+        "label": "Background Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "countdowntextcolor",
+        "label": "Text Color",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "countdownbghovercolor",
+        "label": "Background Hover Color",
+        "default": "#bf0829"
+      },
+      {
+        "type": "color",
+        "id": "countdowntexthovercolor",
+        "label": "Text Hover Color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "header",
+        "content": "Section Top-Bottom Internal Spacing"
+      },
+      {
+        "type": "range",
+        "id": "parallax_topbottom_internal_padding",
+        "min": 50,
+        "max": 200,
+        "step": 50,
+        "label": "Internal Box Space/Padding",
+        "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Section Settings"
+      },
+      {
+        "type": "select",
+        "id": "parallax_text_position",
+        "label": "Text Position",
+        "default": "right",
+        "options": [
+          { "value": "left", "label": "Left"},
+          { "value": "center", "label": "Center"},
+          { "value": "right", "label": "Right"}
+        ]
+      },
+      {
+        "type": "text",
+        "id": "offer",
+        "label": "Parallax Offer Title",
+        "default": "10% OFF ON YOUR FIRST ORDER"
+      },
+      {
+        "type": "text",
+        "id": "main-title",
+        "label": "Parallax title",
+        "default": "Western <span>&</span> Southern"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Parallax Subtitle",
+        "default": "The Offers Ends in"
+      },
+      {
+        "type": "text",
+        "id": "startdate",
+        "label": "Start Date",
+        "placeholder": "YYYY-MM-DD"
+      },
+      {
+        "type": "text",
+        "id": "enddate",
+        "label": "End Date",
+        "placeholder": "YYYY-MM-DD"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "Button Label",
+        "default": "VIEW COLLECTION"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Parallax Block With Timer",
+        "category": "Ishi Parallax Block"
+      }
+    ]
+  }
+{% endschema %}

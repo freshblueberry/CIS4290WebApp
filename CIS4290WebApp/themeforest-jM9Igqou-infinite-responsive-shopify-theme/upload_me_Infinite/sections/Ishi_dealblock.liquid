@@ -1,0 +1,503 @@
+{% comment %} convert our dates to Number of seconds 
+              since 1970-01-01 00:00:00 UTC {% endcomment %}
+{% assign time = 'now' | date: '%s' %}
+
+<div class="page-width">
+  <div class="row">
+    {% if section.settings.title1 != blank %}
+                <div class="section-header text-center">
+                  <h2>{{ section.settings.title1 | escape }}</h2>
+                </div>
+              {% endif %}
+    <div id="ishibannerblock-main" class=" {% if section.settings.show == 'both' %} col-lg-6 col-md-6 col-sm-12 col-xs-12 {% elsif section.settings.show == 'Banner' %}col-lg-12 col-md-12 col-sm-12 banner-full {% else %}not-show{% endif %}">
+
+      <div id="ishibannerblock-{{ section.id }}" class="clearfix"> 
+        
+            <div class="row">              
+                
+                  <div class="ishibanner-container1 bannerblock  {% if section.settings.show == 'both' %}col-md-6 col-sm-6 col-xs-6  {% elsif section.settings.show == 'Banner' %} col-lg-3 col-md-6 col-sm-6 col-xs-6  banner-inner-full{% else %}not-show{% endif %}">
+                    <div class="image-container">
+                      {% if section.settings.bannerimage1 != blank %}
+                      <a class="ishi-customhover-{{ section.settings.bannerhover1 }} {% if section.settings.banner1_scale_enable %}scale{% endif %}" href="{% if section.settings.banner1_link != blank %}{{ section.settings.banner1_link }}{% else %}/{% endif %}">
+                      <img 
+                         src="{{ section.settings.bannerimage1 | img_url: '318x430' }}"
+                         data-widths="[318]"
+                         data-sizes="auto"
+                         alt="{{ section.settings.bannerimage1.alt | escape }}">
+                      </a>
+                       {% else %}
+                      <a href="/">
+                        <img 
+                         src="https://via.placeholder.com/318x430/f1f2f3.png?text=Size :318px X 430px"
+                         data-src="https://via.placeholder.com/318x430/f1f2f3.png?text=Size : 318px X 430px"
+                         data-widths="[318]"
+                         data-sizes="auto"
+                         alt="placeholder">
+                      </a>
+                        {% endif %}
+                    </div>
+                  </div>
+
+
+                  <div class="ishibanner-container1 bannerblock  {% if section.settings.show == 'both' %}col-md-6 col-sm-6 col-xs-6  {% elsif section.settings.show == 'Banner' %} col-lg-3 col-md-6 col-sm-6 col-xs-6  banner-inner-full{% else %}not-show{% endif %}">
+                    <div class="image-container">
+                      {% if section.settings.bannerimage2 != blank %}
+                      <a class="ishi-customhover-{{ section.settings.bannerhover2 }} {% if section.settings.banner2_scale_enable %}scale{% endif %}" href="{% if section.settings.banner2_link != blank %}{{ section.settings.banner2_link }}{% else %}/{% endif %}">
+                      <img 
+                         src="{{ section.settings.bannerimage2 | img_url: '318x430' }}"
+                         data-widths="[318]"
+                         data-sizes="auto"
+                         alt="{{ section.settings.bannerimage2.alt | escape }}">
+                      </a>
+                      {% else %}
+                      <a href="/">
+                        <img 
+                         src="https://via.placeholder.com/318x430/f1f2f3.png?text=Size :318px X 430px"
+                         data-src="https://via.placeholder.com/318x430/f1f2f3.png?text=Size : 318px X 430px"
+                         data-widths="[318]"
+                         data-sizes="auto"
+                         alt="placeholder">
+                      </a>
+                        {% endif %}
+                    </div>
+                  </div>           
+              
+            </div>
+         
+      </div>
+
+    </div>
+
+    <div class="ishispecialdeal-main {% if section.settings.show == 'both' %}col-lg-6 col-md-6 col-sm-12 col-xs-12 {% elsif section.settings.show == 'Deal' %}col-lg-12 col-md-12 sol-sm-12 deal-full {% else %}not-show{% endif %}">
+
+      <div id="ishispecialdeal" >
+        <div class="product_content">
+              
+              {% assign i = 1 %}
+              <div class="specialdealcarousel products-display owl-carousel slider-with-options owl-theme"
+                  {% if section.settings.show == 'both' %}
+                   data-small="1" 
+                   data-mobile="2" 
+                   data-tablet="3"
+                   data-laptop="2"
+                   data-desktop="2"
+                  {% elsif section.settings.show == 'Deal' %}
+                   data-small="1" 
+                   data-mobile="2" 
+                   data-tablet="3" 
+                   data-laptop="3"
+                   data-desktop="4"
+                 {% endif %}
+                  data-margin="30"
+                  data-autoplay="false"
+                  data-dots="false"
+                  data-nav="true"
+                  data-rewind=" true">
+                {% for block in section.blocks %}
+                  {% assign datestart = block.settings.startdate | date: "%s" %}
+                  {% assign dateend = block.settings.enddate |  date: "%s" %}
+                  {% if datestart <= time and dateend > time %}
+                    {%- assign product = all_products[block.settings.product] -%}
+                    <div class="grid__item grid__item--{{section.id}} productdeal"
+                      data-dealcounter="{{ block.settings.enddate }} 00:00:00"
+                      >
+                      <div class="grid-view-item{% unless product.available %} product-price--sold-out grid-view-item--sold-out{% endunless %}">
+                        <div class="grid-view-item__link grid-view-item__image-container">
+                          {% capture img_id %}ProductCardImage-{{ section.id }}-{{ product.id }}{% endcapture %}
+                          {% capture wrapper_id %}ProductCardImageWrapper-{{ section.id }}-{{ product.id }}{% endcapture %}
+                          {%- assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                          <div class=" product-img-desc">
+                            <div class="grid-view-item__image-wrapper js">
+                              <div class="product-img">
+                                
+                                  <div class="image-inner">
+                                    <div class="reveal">
+                                      <a href="{{ product.url | within: collection }}">
+                                      <img 
+                                       class="grid-view-item__image lazy owl-lazy {% unless product.images[1] == blank %} main-img {% endunless %}"
+                                       data-src="{{ product.featured_image | img_url: '370x370' }}"
+                                       data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                                        data-sizes="auto"
+                                       alt="{{ product.featured_image.alt | escape }}">
+                                        {% unless product.images[1] == blank %}
+                                          <img class="extra-img lazy owl-lazy" data-src="{{ product.images[1] | img_url: '370x370' }}" alt="{{ product.images[1].alt | escape }}" />
+                                        {% endunless %}
+                                     </a>
+                                       
+                                        <div class="thumbnail-buttons">
+                                            <div class="quick-view">
+                                              <button class="btn" data-toggle="modal">{% include 'icons' with 'quickview' %}<span>{{ 'products.product.quickview' | t }}</span></button>
+                                            </div>
+                                            {% include 'wishlist-icon' %} 
+                                        </div>
+                                      <div id="productcountdown{{ i }}" class='countdown-container productcountdown'>
+                                        <span class="count-icon"></span>
+                                        <div class='countdown-days counter'>
+                                          <span class="data"></span>
+                                          <span class="lbl">{{ 'general.counter.days' | t }}</span>
+                                        </div>
+                                        <div class='countdown-hours counter'>
+                                          <span class="data"></span>
+                                          <span class="lbl">{{ 'general.counter.hours' | t }}</span>
+                                        </div>
+                                        <div class='countdown-minutes counter'>
+                                          <span class="data"></span>
+                                          <span class="lbl">{{ 'general.counter.minutes' | t }}</span>
+                                        </div>
+                                        <div class='countdown-seconds counter'>
+                                          <span class="data"></span>
+                                          <span class="lbl">{{ 'general.counter.seconds' | t }}</span>
+                                        </div>
+                                      </div>
+                                          
+                                    </div>
+                                    <span class="outstock-overlay">{{ 'products.product.sold_out' | t }}</span>
+                                    <div class="hide imgurl-for-quickview">
+                                      {% for image in product.images %}
+                                        <span>{{image | img_url: '1000x1000'}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="hide socialurl-for-quickview">
+                                      <span>
+                                      </span>
+                                    </div>
+                                  </div>
+                                
+                              </div>
+                            </div>
+                            <div class="product-description">
+                              <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                              <div class="product-detail">
+                                <a href="{{ product.url | within: collection }}">
+                                  <div class="h4 grid-view-item__title">{{ product.title }}</div>
+                                </a>
+                              </div> 
+                              
+                              <div class="grid-view-item__meta">
+                                {% include 'product-price' %}
+                              </div>
+                              {%- assign truncate_desc =  settings.show_description -%}
+                              <div class="product-desc"> {{ product.description | strip_html | truncate: truncate_desc  }}</div>
+                              
+                              <div class="product-block-hover grid-hover">
+                                            <div class="qv-cartmain add_to_cart_main grid-cart hide">
+                                              <form action="/cart/add" method="post" class="add-to-cart product-form product-form-{{ section.id }}" data-section="{{ section.id }}">
+                                                <div class="product-selector">
+                                                  {% unless product.options.size == 1 and product.variants[0].title == 'Default Title' %}
+                                                    {% for option in product.options_with_values %}
+                                                      <div class="selector-wrapper js product-form__item">
+                                                        <label {% if option.name == 'default' %} class="label--hidden" {% endif %}>
+                                                          {{ option.name }}
+                                                        </label>
+                                                        <select class="single-option-selector" data-index="option{{ forloop.index }}">
+                                                          {% for value in option.values %}
+                                                            <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                                                          {% endfor %}
+                                                        </select>
+                                                      </div>
+                                                    {% endfor %}
+                                                  <div class="ishi-quickview-swatch">
+                                                  {% for option in product.options_with_values %}
+                                                    <div class="ishi-custom-swatch">
+                                                      <label {% if option.name == 'default' %}class="label--hidden" {% endif %}>
+                                                        {{ option.name }}
+                                                      </label>
+                                                      <div class="option-swatch" data-selector="option{{ forloop.index }}">
+                                                        {% for value in option.values %}
+                                                          {% if option.name == 'color' or option.name == 'Color'%}
+                                                              <span class="custom-swatch color-swatch{% if option.selected_value == value %} active{% endif %}" style="background-color: {{ value }};" data-index="{{ forloop.index | minus:1}}"></span>
+                                                          {% else %}
+                                                              <span class="custom-swatch{% if option.selected_value == value %} active{% endif %}" data-index="{{ forloop.index | minus:1}}"> {{ value }}</span>
+                                                          {% endif%}
+                                                          {% endfor %}
+                                                      </div>
+                                                    </div>
+                                                  {% endfor %}
+                                                </div>
+                                                  {% endunless %}
+                                                </div>
+                                                <select name="id" data-section="{{ section.id }}" class="product-form__variants no-js">
+                                                  {% for variant in product.variants %}
+                                                      <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}" data-available="{% if variant.available %}1{% else %}0{% endif %}" data-price="{{variant.price | money }}" data-compareatprice="{{variant.compare_at_price | money }}" {% unless variant.available %}disabled="disabled"{% endunless %}>{{ variant.title | escape | strip_html | strip_newlines}}</option>
+                                                  {% endfor %}
+                                                </select>
+                                                  <div class="product-form__item product-form__item--quantity">
+                                                    <div class="dec button qtyminus">-</div>
+                                                    <input name="quantity" value="1" class="quantity">
+                                                    <div class="inc button qtyplus">+</div> 
+                                                  </div>
+                                                <div class="product-form__item product-form__item--submit">
+                                                  {% if product.available == false %}
+                                                    <a href="javascript: void(0)" class="addToCart  sold-out enable btn">
+                                                      <span>
+                                                       {{ 'products.product.sold_out' | t }}
+                                                     </span>
+                                                    </a>
+                                                    {% elsif product.variants[1] != blank %}
+                                                    <a href="javascript: void(0)" class="qv-addToCart addToCart enable btn">
+                                                      <span class="instock">
+                                                        {{ 'products.product.add_to_cart' | t }}
+                                                      </span>
+                                                      <span class="outstock">
+                                                       {{ 'products.product.sold_out' | t }}
+                                                     </span>
+                                                     <span class="adding">
+                                                       {{ 'products.product.adding' | t }}
+                                                     </span>
+                                                    </a>
+                                                    {% else %}
+                                                    <a href="javascript: void(0)"  class="qv-addToCart  addToCart enable btn">
+                                                      <span class="instock">
+                                                        {{ 'products.product.add_to_cart' | t }}
+                                                      </span>
+                                                      <span class="adding">
+                                                       {{ 'products.product.adding' | t }}
+                                                     </span>
+                                                    </a> 
+                                                    {% endif %}
+                                                </div>
+                                                <input type="hidden" name="return_to" value="back" />
+                                              </form>
+                                            </div>
+                                            <div class="nm-cartmain add_to_cart_main grid-cart">
+                                              <form action="/cart/add" method="post" class="add-to-cart product-form product-form-{{ section.id }}" data-section="{{ section.id }}">
+
+                                                <select name="prduct-variant" data-section="{{ section.id }}" class="product-form__variants no-js">
+
+                                                  {% for variant in product.variants %}
+                                                    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}" data-available="{% if variant.available %}1{% else %}0{% endif %}" {% unless variant.available %}disabled="disabled"{% endunless %}>{{ variant.title | escape | strip_html | strip_newlines}}  </option>
+                                                  {% endfor %}
+                                                </select>
+                                                {% for variant in product.variants %}
+                                                {% if variant == product.selected_or_first_available_variant %} 
+                                                <input type="text" name="prduct-variant" value="{{ variant.id }}" class="product-form__input">
+                                                {% endif %}
+                                                {% endfor %}
+                                                <input type="number" name="product-quantity" value="1" min="1" class="product-form__input">
+
+                                                  <div class="product-form__item product-form__item--submit">
+                                                    {% if product.available == false %}
+                                                    <a href="{{ product.url | within: collection }}" class="addToCart sold-out enable btn">
+                                                      {% include 'icons' with 'addtocart' %}
+                                                      <span>
+                                                           {{ 'products.product.sold_out' | t }}
+                                                      </span>
+                                                    </a>
+                                                    {% elsif product.variants[1] != blank %}
+                                                    <a href="{{ product.url | within: collection }}" class="addToCart enable btn">
+                                                      {% include 'icons' with 'addtocart' %}
+                                                      <span >
+                                                         {{ 'products.product.select' | t }}
+                                                      </span>
+                                                    </a>
+                                                    {% else %}
+                                                    <a href="javascript: void(0)"  class="nm-addToCart addToCart enable btn">
+                                                      {% include 'icons' with 'addtocart' %}
+                                                      <span>
+                                                           {{ 'products.product.add_to_cart' | t }}
+                                                      </span>
+                                                    </a>
+                                                    {% endif %}
+                                                  </div>
+                                              </form>
+                                            </div>
+                                      </div>
+                            
+                              
+                            </div>
+                          </div>
+                        
+                          <noscript>
+                            {% capture image_size %}{{ max_height }}x{{ max_height }}{% endcapture %}
+                            <img class="grid-view-item__image" src="{{ product.featured_image.src | img_url: image_size, scale: 2 }}" alt="{{ product.featured_image.alt }}" style="max-width: {{ max_height | times: product.featured_image.aspect_ratio }}px;">
+                          </noscript>
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                  {% assign i = i | plus: 1 %}
+                {% endfor %}
+              </div>
+        </div>
+      </div>
+
+    </div>
+
+
+</div>
+</div>
+
+<style type="text/css">
+  .specialdeal-block {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  @media (max-width: 767px) {
+    .specialdeal-block {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+{% schema %}
+
+  {
+    "name": " Banner+Special Deal",
+    "class": "specialdeal-block",
+    "settings": [
+    {
+        "type": "select",
+        "id": "show",
+        "label": "Layout",
+        "default": "both",
+        "options": [
+          { "value": "both", "label": "Banner + Deal"},
+          { "value": "Banner", "label": "Only Banner"},
+          { "value": "Deal", "label": "Only Deal Section"}
+        ]
+      },
+      {
+        "type": "text",
+        "id": "title1",
+        "label": "Main Title"
+      },
+      {
+        "type": "header",
+        "content": "bannerblock-1"
+      },
+      {
+        "type": "image_picker",
+        "id": "bannerimage1",
+        "label": "Image",
+        "info": "Size: 318px X 430px"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner1_scale_enable",
+        "label": "Scale Banner",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "bannerhover1",
+        "label": "Hover",
+        "options": [
+          { "value": "fadeinnormal", "label": "FadeIn Normal"},
+          { "value": "fadeinflip", "label": "FadeIn Flip"},
+          { "value": "fadeinrotate", "label": "FadeIn Rotate"},
+          { "value": "fadeinrotate3D", "label": "FadeIn Rotate3D"},
+          { "value": "fadeintop", "label": "FadeIn Top"},
+          { "value": "fadeinbottom", "label": "FadeIn Bottom"},
+          { "value": "fadeintopbottom", "label": "FadeIn Top Bottom"},
+          { "value": "fadeoutcenter", "label": "FadeOut Center"},
+          { "value": "fadeinoutbordercorner", "label": "FadeInOut BorderCorner"},
+          { "value": "doublefadeincenter", "label": "Double FadeInOut Center"},
+          { "value": "fadeinoutsingle", "label": "FadeInOut Single Scroll"},
+          { "value": "fadeinoutdoublevertical", "label": "FadeInOut Double Scroll"},
+          { "value": "perspective", "label": "Perspective"},
+          { "value": "fadeinoutrotatevertical", "label": "FadeInOut Rotate Vertical"}
+        ]
+      },
+      {
+        "type": "url",
+        "id": "banner1_link",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "bannerblock-2"
+      },
+      {
+        "type": "image_picker",
+        "id": "bannerimage2",
+        "label": "Image",
+        "info": "Size: 318px X 430px"
+
+      },
+      {
+        "type": "checkbox",
+        "id": "banner2_scale_enable",
+        "label": "Scale Banner",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "bannerhover2",
+        "label": "Hover",
+        "options": [
+          { "value": "fadeinnormal", "label": "FadeIn Normal"},
+          { "value": "fadeinflip", "label": "FadeIn Flip"},
+          { "value": "fadeinrotate", "label": "FadeIn Rotate"},
+          { "value": "fadeinrotate3D", "label": "FadeIn Rotate3D"},
+          { "value": "fadeintop", "label": "FadeIn Top"},
+          { "value": "fadeinbottom", "label": "FadeIn Bottom"},
+          { "value": "fadeintopbottom", "label": "FadeIn Top Bottom"},
+          { "value": "fadeoutcenter", "label": "FadeOut Center"},
+          { "value": "fadeinoutbordercorner", "label": "FadeInOut BorderCorner"},
+          { "value": "doublefadeincenter", "label": "Double FadeInOut Center"},
+          { "value": "fadeinoutsingle", "label": "FadeInOut Single Scroll"},
+          { "value": "fadeinoutdoublevertical", "label": "FadeInOut Double Scroll"},
+          { "value": "perspective", "label": "Perspective"},
+          { "value": "fadeinoutrotatevertical", "label": "FadeInOut Rotate Vertical"}
+        ]
+      },
+      {
+        "type": "url",
+        "id": "banner2_link",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Product",
+        "settings": [
+          {
+          "id": "product",
+          "type": "product",
+          "label": "Select Your Product"
+          },
+          {
+            "type": "text",
+            "id": "startdate",
+            "label": "Start Date",
+            "placeholder": "YYYY-MM-DD"
+          },
+          {
+            "type": "text",
+            "id": "enddate",
+            "label": "End Date",
+            "placeholder": "YYYY-MM-DD"
+          }
+        ]
+      } 
+    ],
+    "presets": [
+      {
+        "name": "Ishi Banner + Deal Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}

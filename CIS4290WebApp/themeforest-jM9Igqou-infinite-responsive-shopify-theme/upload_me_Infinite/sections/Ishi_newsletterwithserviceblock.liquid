@@ -1,0 +1,212 @@
+
+<div class="page-width">
+  <div class="newsletter-servies">  
+     <div class="newsletter">
+        <div id="newsletter-container" class="block_newsletter newsletter-inner">
+          <div id="ishinewsletter-container" class="footer-dropdown">
+            {% if section.settings.heading != blank or section.settings.sub-heading != blank %}
+              <div class="newsletter_text col-lg-6 col-md-6 col-sm-12 col-xs-12">     
+                <div class="email-title"> 
+                 {% if section.settings.heading != blank %}
+                  <div class="email-icon">{% include 'icons' with 'mail' %}</div>
+                    <div class="heading">
+                      <h2>{{ section.settings.heading | escape }}</h2>
+                    </div> 
+                  {% endif %}
+                </div>             
+                  {% if section.settings.sub-heading != blank %}
+                    <div class="sub-heading">
+                      {{ section.settings.sub-heading | escape }}
+                    </div>
+                  {% endif %}
+              </div>
+            {% endif %}
+            <div class="site-footer__newsletter {% if section.settings.heading != blank or section.settings.sub-heading != blank %}col-lg-6 col-md-6 col-sm-12 col-xs-12{% else %}col-lg-8 col-md-8 col-sm-12 col-xs-12 news-full{% endif %}">
+              {% form 'customer' %}
+                {% if form.posted_successfully? %}
+                  <p class="form--success alert alert-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                {% else %}
+                  <div class="input-group">
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <input type="email"
+                      name="contact[email]"
+                      id="Email"
+                      class="input-group__field newsletter__input"
+                      value="{% if customer %}{{ customer.email }}{% endif %}"
+                      placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                      autocapitalize="off">
+                    <span class="input-group__btn">
+                      <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+                        <span class="newsletter__submit-text--large hidden-xs-down">{{ 'general.newsletter_form.submit' | t }}</span>
+                        <span class="newsletter__submit-text--large hidden-xs-up">{{ 'general.newsletter_form.go' | t }}</span>
+                      </button>
+                    </span>
+                  </div>
+                {% endif %}
+                {{ form.errors | default_errors }}
+              {% endform %} 
+            </div>
+          </div>
+        </div>
+    </div>  
+    {% if section.blocks.size > 0 %}
+      <div class="ishiservices">
+        <div class="ishiservices-content">
+          <div class="service-block row" id="services-{{ section.id }}">
+              {% for block in section.blocks %} 
+                  <div class="services col-md-3 col-sm-6 col-xs-6">
+                    {% if block.settings.link != blank %}
+                      <a href="{{ block.settings.link }}">
+                    {% endif %}
+                    <div class="service-img-outer">
+                      <div class="service-img">
+                        {% if block.settings.service-image != blank %}
+                          {{ block.settings.service-image | img_tag: block.settings.service-image.alt}}
+                        {% endif %}
+                      </div>
+                    </div>
+                      <div class="service-text">
+                      {% if block.settings.service-title != blank %}
+                        <div class="service-title">{{ block.settings.service-title | escape }}</div>
+                        {% endif %}
+                        {% if block.settings.service-desc != blank %}
+                         <div class="service-desc">{{ block.settings.service-desc | escape }}</div>
+                         {% endif %}
+                      </div> 
+                    {% if block.settings.link != blank %}
+                      </a>
+                    {% endif %}
+                  </div>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+  </div>
+</div>
+
+
+
+<style type="text/css">
+  .ishi-newsletter-services-block .newsletter-servies{
+    background:{{ section.settings.newsletter_background }};
+  }
+  .ishi-newsletter-services-block {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  .ishi-newsletter-services-block .newsletter .block_newsletter .newsletter_text .email-title .email-icon svg{
+    fill:{{ section.settings.text-color }};
+  }
+  .ishi-newsletter-services-block .newsletter .block_newsletter .newsletter_text .email-title .heading h2,
+  .ishi-newsletter-services-block .newsletter-servies .ishiservices .services .service-text .service-title,
+  .ishi-newsletter-services-block .newsletter-servies .ishiservices .services .service-text .service-desc{
+    color:{{ section.settings.text-color }};
+  }
+  .ishi-newsletter-services-block .newsletter .block_newsletter .newsletter_text .sub-heading{
+    color:{{ section.settings.text-color | color_modify: 'alpha', 0.7 }};
+  }
+  @media (max-width: 767px) {
+    .ishi-newsletter-services-block {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+
+
+{% schema %}
+  {
+    "name": "Newsletter + Services",
+    "class": "ishi-newsletter-services-block",
+    "settings": [
+      {
+        "type": "color",
+        "id": "newsletter_background",
+        "label": "Background Color",
+        "default": "#f5f5f5"
+      },
+	  {
+        "type": "color",
+        "id": "text-color",
+        "label": "Text Color",
+        "default": "#000000"
+      },
+      {
+        "type": "header",
+        "content": "Newsletter Settings"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Title",
+        "default": "Sign up & Get offer"
+      },
+      {
+        "type": "text",
+        "id": "sub-heading",
+        "label": "Sub Title",
+        "default": "Lorem ipsum dolor sit amet conse ctetur adipisicing elit"
+      },
+      
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "blocks": [
+      { 
+        "type": "image",
+        "name": "Service",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "service-image",
+            "label": "Image",
+            "info": "Size: 30px X 30px"
+          },
+          {
+            "type": "text",
+            "id": "service-title",
+            "label": "Heading",
+            "default": "Service Title"
+          },
+          {
+            "type": "text",
+            "id": "service-desc",
+            "label": "Sub Title",
+            "default": "Lorem Ipsum dummy text"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link" 
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Newsletter + Service Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,25 @@
+<div class="userinfo-inner">
+  <ul class="header-bar__module header-bar__module--list">
+    {% if section.settings.show_checkout %}
+      <div class="checkout">
+        <a class="nav-icon" href="/checkout">{{ 'cart.general.checkout-title' | t }}</a>
+      </div>
+    {% endif %}
+    {% if section.settings.show_wishlist %}
+      <div class="wishlist">
+        <a class="nav-icon" href="/pages/wishlist">{{ 'layout.wishlist.title' | t }}</a>
+      </div>
+    {% endif %}
+    {% if shop.customer_accounts_enabled %}
+      {% if customer %}
+        <div class="user_info">
+          <a href="/account">{{ customer.first_name }}</a>
+        </div>
+      {% else %}
+        <div class="user_info">
+          <a href="/account">{{ 'customer.account.title' | t }}</a>
+        </div>
+      {% endif %}
+    {% endif %}
+  </ul>
+</div>

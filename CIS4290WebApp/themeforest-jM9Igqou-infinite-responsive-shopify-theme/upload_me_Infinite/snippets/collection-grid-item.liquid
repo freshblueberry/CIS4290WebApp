@@ -1,0 +1,55 @@
+{% if collection.products.first and collection.products.first.images != empty %}
+  {%- assign collection_image = collection.products.first.featured_image -%}
+{% else %}
+  {% assign collection_image = blank %}
+{% endif %}
+
+
+<div class="collection-grid-item">
+  <a href="{% if collection.products == empty %}/{% else %}{{ collection.url }}{% endif %}">
+    {% if collectionimage != blank %}
+      <div class="collection-grid-item__overlay">
+        <img 
+             src="{{ collectionimage | img_url: '1024x1024' }}"
+             data-src="{{ img_url }}"
+             alt="{{ collectionimage | escape }}"
+             data-widths="[1024]"
+             data-sizes="auto" >
+          {% if section.settings.show_collection_item %}
+            <div class="collection-item">{{ collection.all_products.size }} {{ 'general.module.item' | t }}</div>
+          {% endif %}
+      </div>
+   {% else %}
+     {% if collection == empty %}
+        <div class="collection-grid-item__overlay">
+          {% capture current %}{% cycle 1, 2, 3 %}{% endcapture %}
+          {{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {% else %}
+         <div class="collection-grid-item__overlay">
+            <img 
+                 src="{{ collection_image | img_url: '300x300' }}"
+                 data-widths="[300]"
+                 data-sizes="auto" 
+                 alt="{{ collection_image | escape }}">
+            {% if section.settings.show_collection_item %}
+              <div class="collection-item">{{ collection.all_products.size }} {{ 'general.module.item' | t }}</div>
+            {% endif %}
+          </div>
+      {% endif %}
+   {% endif %}
+    <div class="collection-grid-item__title-wrapper">
+      <h3 class="collection-grid-item__title">
+        {% if collection.title == blank %}
+          {{ 'homepage.onboarding.collection_title' | t }}
+        {% else %}
+          {{ collection.title }}
+        {% endif %}
+      </h3>
+     
+      <span class="collection-grid-total_item btn btn-primary">
+        {{ 'homepage.onboarding.btn_title' | t }}
+      </span>
+    </div>
+  </a>
+</div>

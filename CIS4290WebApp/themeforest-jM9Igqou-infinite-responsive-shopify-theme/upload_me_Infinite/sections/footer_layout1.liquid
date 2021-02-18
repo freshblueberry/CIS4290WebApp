@@ -1,0 +1,605 @@
+{%- assign social_icons = false -%}
+
+{% if
+  settings.social_twitter_link != blank
+  or settings.social_facebook_link != blank
+  or settings.social_pinterest_link != blank
+  or settings.social_instagram_link != blank
+  or settings.social_tumblr_link != blank
+  or settings.social_snapchat_link != blank
+  or settings.social_youtube_link != blank
+  or settings.social_vimeo_link != blank
+  or template.name == 'article'
+  or template.name == 'blog'
+%}
+  {%- assign social_icons = true -%}
+{% endif %}
+ 
+  
+<footer class="site-footer {% if section.settings.footerimage %}footerimage lazy{% else %}footer-color {% endif %}"
+        data-bg="url({{ section.settings.footerimage | img_url: 'master' }})">
+  {% if section.blocks.size > 0 %}
+    <div class="footer-before">
+      <div class="page-width manufacturer-main">   
+        <div class="manufacturer-block">
+          <div id="manufacturer-carousel" class="manufacturer-carousel-{{ section.id }} owl-carousel slider-with-options owl-theme logo-bar"
+               data-small="2" 
+               data-mobile="3" 
+               data-tablet="4" 
+               data-laptop="5"  
+               data-desktop="6"
+               data-autoplay="false"
+               data-nav="false"
+               data-dots="false"
+               data-loop="true"
+               data-autoplaytimeout="4000"
+               data-smartSpeed="2500">
+            {% for block in section.blocks %}                      
+            {% case block.type %}
+            {% when 'brand_block' %} 
+            <div class="logo-bar__item" {{ block.shopify_attributes }}>
+              {% if block.settings.link2 != blank %}
+              <a href="{{ block.settings.link2 }}" class="logo-bar__link">
+                {% endif %}
+                {% if block.settings.image2 != blank %}
+                <img
+                     class="lazy owl-lazy"
+                     data-src="{{ block.settings.image2 | img_url: '130x130', scale: 2 }}"
+                     width="130" height="130">
+                {% else %}
+                {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
+                {% endif %}
+                {% if block.settings.link2 != blank %}
+              </a>
+              {% endif %}
+            </div>
+            {% endcase %}  
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="footer-container">
+      <div class="page-width">
+        <div class="row">
+            <div class="footer-content store-info-block col-md-3 footer-block">
+              <div id="ishistoreinfo-container" class="ishistoreinfo-inner footer-dropdown">
+                <div class="store-img">
+                  {% capture image_layout %}
+                  <div class="feature-row__item">
+                    {% if section.settings.image != blank %}
+                      <div class="feature-row__image-wrapper js">
+                        <div class="img-block">
+                          <a href="/">
+                            <img 
+                            class="feature-row__image lazyload"
+                            src="{{ section.settings.image | img_url: '165x49' }}"
+                            data-src="{{ img_url }}"
+                            data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                            data-aspectratio="{{ section.settings.image.aspect_ratio }}"
+                            data-sizes="auto"
+                            alt="{{ section.settings.image.alt | escape }}">
+                          </a>
+                        </div>
+                      </div>
+                    {% else %}
+                        <a class="site-header__logo-link" href="/" itemprop="url">{{ shop.name }}</a>
+                    {% endif %}
+                  </div>
+                  {% endcapture %}
+                  {{ image_layout }}
+                </div>
+                {% if section.settings.text != blank %}
+                <div class="store-desc">{{ section.settings.text }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div id="_mobile_contact"></div>
+            <div class="bottom-link-list footer-block col-md-2">
+              {% if section.settings.link1_title != blank %}
+                <div class="footer-title clearfix hidden-lg-up collapsed" data-target="#account-info-container" data-toggle="collapse">
+                  <span class="h3 block-heading">{{ section.settings.link1_title }}</span>
+                  <span class="navbar-toggler collapse-icons">
+                    <i class="material-icons add">&#xE313;</i>
+                    <i class="material-icons remove">&#xE316;</i>
+                  </span>
+                </div>
+              {% endif %}
+              <div id="account-info-container" class="account-info-inner {% if section.settings.link1_title != blank %}collapse{% endif %} footer-dropdown">
+                {%- assign footer_linklist_two = section.settings.footer_linklist_two -%}
+                {% if linklists[footer_linklist_two].links.size > 0 %}
+                  {% if section.settings.link1_title != blank %}
+                    <h2 class="footer-heading hidden-lg-down">{{ section.settings.link1_title }}</h2>
+                  {% endif %}
+                  <ul class="site-footer__linklist">
+                    {% for link in linklists[footer_linklist_two].links %}
+                      <li class="site-footer__linklist-item">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+            <div class="bottom-link-list footer-information col-md-2 footer-block">
+              {% if section.settings.link2_title != blank %}
+                <div class="footer-title clearfix hidden-lg-up collapsed" data-target="#product-info-container" data-toggle="collapse">
+                  <span class="h3 block-heading">{{ section.settings.link2_title }}</span>
+                  <span class="navbar-toggler collapse-icons">
+                    <i class="material-icons add">&#xE313;</i>
+                    <i class="material-icons remove">&#xE316;</i>
+                  </span>
+                </div>
+              {% endif %}
+              <div id="product-info-container" class="product-info-inner {% if section.settings.link2_title != blank %}collapse{% endif %} footer-dropdown">                
+                {%- assign footer_linklist_three = section.settings.footer_linklist_three -%}
+                {% if linklists[footer_linklist_three].links.size > 0 %}
+                  {% if section.settings.link2_title != blank %}
+                    <h2 class="footer-heading hidden-lg-down">{{ section.settings.link2_title }}</h2>
+                  {% endif %}
+                  <ul class="site-footer__linklist">
+                    {% for link in linklists[footer_linklist_three].links %}
+                      <li class="site-footer__linklist-item">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+            <div class="bottom-link-list col-md-2 footer-block">
+              {% if section.settings.link3_title != blank %}
+                <div class="footer-title clearfix hidden-lg-up collapsed" data-target="#policies-info-container" data-toggle="collapse">
+                  <span class="h3 block-heading">{{ section.settings.link3_title }}</span>
+                  <span class="navbar-toggler collapse-icons">
+                    <i class="material-icons add">&#xE313;</i>
+                    <i class="material-icons remove">&#xE316;</i>
+                  </span>
+                </div>
+              {% endif %}
+              <div id="policies-info-container" class="policies-info-inner {% if section.settings.link3_title != blank %}collapse{% endif %} footer-dropdown">
+                {%- assign footer_linklist_one = section.settings.footer_linklist_one -%}
+                {% if linklists[footer_linklist_one].links.size > 0 %}
+                  {% if section.settings.link3_title != blank %}
+                    <h2 class="footer-heading hidden-lg-down">{{ section.settings.link3_title }}</h2>
+                  {% endif %}
+                  <ul class="site-footer__linklist">
+                    {% for link in linklists[footer_linklist_one].links %}
+                      <li class="site-footer__linklist-item">
+                        <a href="{{ link.url }}">{{ link.title }}</a>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </div>
+            {% if section.settings.show_contact or section.settings.show_address or section.settings.show_email %}
+              <div id="_desktop_contact">
+                <div class="footer-content contact-info col-md-3 col-sm-12 footer-block">
+                  <div id="contact-info-container" class="contact-info-inner footer-dropdown">
+                    {% if section.settings.store_title != blank %}
+                     <h2 class="footer-heading hidden-lg-down">{{ section.settings.store_title }}</h2>
+                    {% endif %}
+                    <ul class="site-footer__linklist">
+
+                      {% if section.settings.show_address and shop.address != blank %}
+                        <li class="site-footer__linklist-item shop-address col-md-12 col-sm-4 col-xs-4">
+                          <i class="fa fa-map-marker" aria-hidden="true"></i>
+                          <div class="content">
+                             <span>{{shop.address.street | escape }}</span>
+                             <span>{{shop.address.country}}</span>
+                          </div>
+                        </li>
+                      {% endif %}
+                      
+                      {% if section.settings.show_contact and shop.phone != blank %}
+                        <li class="site-footer__linklist-item shop-contact col-md-12 col-sm-4 col-xs-4">
+                          <i class="fa fa-phone" aria-hidden="true"></i>
+                          <div class="content">
+                            <a href="/">
+                              {{shop.phone}}
+                            </a>
+                          </div>
+                        </li>
+                      {% endif %}
+
+                      {% if section.settings.show_email and shop.email != blank %}
+                        <li class="site-footer__linklist-item shop-email col-md-12 col-sm-4 col-xs-4">
+                          <i class="fa fa-envelope" aria-hidden="true"></i>
+                          <div class="content">
+                            <a href="mailto:{{shop.email}}">
+                            {{shop.email}}
+                            </a>  
+                          </div>
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="page-width">
+        <div class="row">
+          {% if section.settings.copyright != blank %}
+          <div class="footer-left {% if section.settings.show_social and section.settings.show_payment %}col-lg-4 col-md-4 col-xs-12 {% else %}col-lg-6 col-md-6 col-xs-12 {% endif %}">
+            <div class="site-footer__copyright--bottom">
+             {{ section.settings.copyright }}
+            </div>
+          </div>
+          {% endif %}
+           {% if section.settings.show_social %}
+            <div class="footer-center {% if section.settings.copyright == blank %}col-lg-6 col-md-6 col-xs-12 text-left{% elsif section.settings.show_payment %} col-lg-4 col-md-4 col-xs-12 text-center{% else %}col-lg-6 col-md-6 col-xs-12 text-right{% endif %}">
+              <div class="follow-us">
+                <div id="social-icon-container" class="social-icon-inner">
+                  <div class="social-media-blocks">
+                    {% if social_icons %}
+                      <div class="social-icon-inner">
+                        <div class="header-social">
+                          <ul class="list--inline site-footer__social-icons social-icons">
+                            {% if settings.social_facebook_link != blank %}
+                              <li class="facebook">
+                                <a class="social-icons__link" href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}" target="_blank">
+                                  <i class="fa fa-facebook" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.facebook' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_twitter_link != blank %}
+                              <li class="twitter">
+                                <a class="social-icons__link" href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}" target="_blank">
+                                  <i class="fa fa-twitter" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.twitter' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_pinterest_link != blank %}
+                              <li class="pinterest">
+                                <a class="social-icons__link" href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}" target="_blank">
+                                  <i class="fa fa-pinterest-p" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.pinterest' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_instagram_link != blank %}
+                              <li class="instagram">
+                                <a class="social-icons__link" href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}" target="_blank">
+                                  <i class="fa fa-instagram" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.instagram' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_tumblr_link != blank %}
+                              <li class="tumblr">
+                                <a class="social-icons__link" href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}" target="_blank">
+                                  <i class="fa fa-tumblr" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.tumblr' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_snapchat_link != blank %}
+                              <li class="snapchat">
+                                <a class="social-icons__link" href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}" target="_blank">
+                                  <i class="fa fa-snapchat-ghost" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.snapchat' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_youtube_link != blank %}
+                              <li class="youtube">
+                                <a class="social-icons__link" href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}" target="_blank">
+                                  <i class="fa fa-youtube-play" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.youtube' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if settings.social_vimeo_link != blank %}
+                              <li class="vimeo">
+                                <a class="social-icons__link" href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}" target="_blank">
+                                  <i class="fa fa-vimeo" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.vimeo' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                            {% if template.name == 'blog' or template.name == 'article' %}
+                              <li class="rss">
+                                <a class="social-icons__link" href="{{ shop.url }}{{ blog.url }}.atom" target="_blank">
+                                  <i class="fa fa-rss" aria-hidden="true"></i>
+                                  <span class="icon__-text">{{ 'general.social.rss' | t }}</span>
+                                </a>
+                              </li>
+                            {% endif %}
+                          </ul>
+                        </div>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+           {% endif %}
+          {% if section.settings.show_payment %} 
+           <div class="footer-right {% if section.settings.copyright != blank and section.settings.show_social %}col-lg-4 col-md-4 col-xs-12 {% else %}col-lg-6 col-md-6 col-xs-12 {% endif %}">
+          	<div class="payment-icons">
+              <div class="logo-bar">
+                {% if section.settings.show_visa %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'visa' %} 
+                  </div>
+                </div>
+                {% endif %}
+                {% if section.settings.show_paypal %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'paypal' %} 
+                  </div>
+                </div>
+                {% endif %}
+                {% if section.settings.show_mastercard %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'mastercard' %} 
+                  </div>
+                </div>
+                {% endif %}
+                {% if section.settings.show_discover %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'discover' %} 
+                  </div>
+                </div>
+                 {% endif %}
+                {% if section.settings.show_americanexpress %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'americanexpress' %} 
+                  </div>
+                </div>
+                 {% endif %}
+                {% if section.settings.show_googlewallet %}
+                <div class="logo-bar__item">
+                  <div class="logo-bar__link">
+                   {% include 'icons' with 'googlewallet' %} 
+                  </div>
+                </div>
+                {% endif %}
+               {% if section.blocks.size > 0 %}
+                {% for block in section.blocks %}
+                {% case block.type %}
+                   {% when 'logo_image' %}
+                  <div class="logo-bar__item" {{ block.shopify_attributes }}>
+                      <div class="logo-bar__link">
+                    {% if block.settings.image != blank %}
+                        <img class="logo-bar__image lazy"
+                             data-src="{{ block.settings.image | img_url: '44x30', scale: 2}}"
+                             alt="block.settings.image.alt">
+                    {% endif %}
+                      </div>
+                  </div>
+                {% endcase %}
+                {% endfor %}
+               {% endif %}
+              </div>
+          </div>
+           </div>
+          {% endif %}
+        </div> 
+      </div>   
+    </div>
+</footer>
+
+
+{% schema %}
+  {
+    "name": "Footer Layout1",
+    "class": "footer-layout1",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Footer Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "footerimage",
+        "label": "Background Image",
+        "info": "Size: 1920px X 850px"
+      },
+      {
+        "type": "header",
+        "content": "Store information setting"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Store Logo",
+        "info": "Size: 165px X 49px"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Store Description",
+        "default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore adipisicing elit, sed do eiusmod.</p>"
+      },
+      {
+        "type": "header",
+        "content": "your account setting"
+      },
+      {
+        "type": "text",
+        "id": "link1_title",
+        "label": "Title",
+        "default": "YOUR ACCOUNT"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_linklist_two",
+        "label": "Footer-Link",
+        "default": "main-menu"
+      },
+      {
+        "type": "header",
+        "content": "product setting"
+      },
+      {
+        "type": "text",
+        "id": "link2_title",
+        "label": "Title",
+        "default": "PRODUCTS"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_linklist_three",
+        "label": "Footer-Link",
+        "default": "main-menu"
+      },
+      {
+        "type": "header",
+        "content": "our company setting"
+      },
+      {
+        "type": "text",
+        "id": "link3_title",
+        "label": "Title",
+        "default": "OUR COMPANY"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_linklist_one",
+        "label": "Footer-Link",
+        "default": "main-menu"
+      },
+      {
+        "type": "header",
+        "content": "Contact Information setting"
+      },
+      {
+        "type": "text",
+        "id": "store_title",
+        "label": "Title",
+        "default": "STORE INFORMATION"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_email",
+        "label": "Show Email ID",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_address",
+        "label": "Show Address",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_contact",
+        "label": "Show Contact",
+        "default": true
+      },
+ {
+        "type": "header",
+        "content": "Copyright setting"
+      },
+    {
+        "type": "text",
+        "id": "copyright",
+        "label": "Copyright Text",
+        "default": "<p>© 2021, Infinite Sectioned Shopify Theme Powered by Shopify</p>"
+      },
+      {
+        "type": "header",
+        "content": "Social setting"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_social",
+        "label": "Show Social Icon",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Payment setting"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment",
+        "label": "Show Payment Block",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_visa",
+        "label": "Show Visa Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_paypal",
+        "label": "Show PayPal Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_mastercard",
+        "label": "Show MasterCard Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_discover",
+        "label": "Show Discover Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_americanexpress",
+        "label": "Show AmericanExpress Icon",
+        "default": true
+      },
+    {
+        "type": "checkbox",
+        "id": "show_googlewallet",
+        "label": "Show GoogleWallet Icon",
+        "default": true
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "Payment Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Payment Logo Image",
+            "info": "Size: 44px X 30px"
+          }
+        ]
+      },
+      {
+        "type": "brand_block",
+        "name": "Brand Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Brand Image",
+            "info": "Size: 130px X 130px"
+          },
+          {
+            "type": "url",
+            "id": "link2",
+            "label": "Link",
+            "info": "Optional"
+          }
+        ]
+      }
+    ]
+  }
+
+{% endschema %}

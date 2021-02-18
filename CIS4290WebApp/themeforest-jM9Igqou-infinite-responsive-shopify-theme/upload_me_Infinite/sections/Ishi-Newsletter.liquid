@@ -1,0 +1,212 @@
+
+<div class="newsletter-main page-width" >
+  <div class="{% if section.settings.newsimage %} newsletterimage lazy{% else %} newsletter {% endif %}"
+         data-bg="url({{ section.settings.newsimage | img_url: 'master' }})">
+    <div class="row">  
+        <div id="newsletter-container" class="block_newsletter newsletter-inner {% if section.settings.show_banner != blank %}col-lg-6 col-md-6 col-sm-12 col-xs-12 {% elsif section.settings.show_banner == blank %} col-lg-12 col-md-12 col-sm-12 col-xs-12  news-full{% else %} {% endif %}">
+          <div id="ishinewsletter-container" class="footer-dropdown">
+            <div class="newsletter_text ">                  
+              <div class="email-icon">{% include 'icons' with 'mail' %}</div>
+               {% if section.settings.heading != blank %}
+                  <div class="heading">
+                    <h2>{{ section.settings.heading | escape }}</h2>
+                  </div>
+                {% endif %}
+              <div class="email-title">                   
+                {% if section.settings.sub-heading != blank %}
+                  <div class="sub-heading">
+                    {{ section.settings.sub-heading | escape }}
+                  </div>
+                {% endif %}
+              </div>
+            </div>                
+              {% form 'customer' %}
+                {% if form.posted_successfully? %}
+                  <p class="form--success alert alert-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                {% else %}
+                  <div class="input-group">
+                    <input type="hidden" name="contact[tags]" value="newsletter">
+                    <input type="email"
+                      name="contact[email]"
+                      id="Email"
+                      class="input-group__field newsletter__input"
+                      value="{% if customer %}{{ customer.email }}{% endif %}"
+                      placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                      autocapitalize="off">
+                    <span class="input-group__btn">
+                      <button type="submit" class="btn newsletter__submit" name="commit" id="Subscribe">
+                        <span class="newsletter__submit-text--large hidden-xs-down">{{ 'general.newsletter_form.submit' | t }}</span>
+                        <span class="newsletter__submit-text--large hidden-xs-up">{{ 'general.newsletter_form.go' | t }}</span>
+                      </button>
+                    </span>
+                  </div>
+                {% endif %}
+                {{ form.errors | default_errors }}
+              {% endform %}               
+          </div>
+        </div>
+ 
+
+
+        {% if section.settings.show_banner != blank %}
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 banner-left">          
+            <div id="ishibanner1" class="ishibanner-container1 bannerblock ">
+              <div class="image-container">
+                {% if section.settings.bannerimage1 != blank %}
+                <a class="ishi-customhover-{{ section.settings.bannerhover1 }} {% if section.settings.banner1_scale_enable %}scale{% endif %}" href="{% if section.settings.banner1_link != blank %}{{ section.settings.banner1_link }}{% else %}/{% endif %}">
+                <img 
+                   src="{{ section.settings.bannerimage1 | img_url: '666x208' }}"
+                   data-widths="[666]"
+
+                   data-sizes="auto"
+                   alt="{{ section.settings.bannerimage1.alt | escape }}">
+                </a>
+                 {% else %}
+                      <a href="/">
+                        <img 
+                         src="https://via.placeholder.com/666x208/f1f2f3.png?text=Size :666px X 208px"
+                         data-src="https://via.placeholder.com/666x208/f1f2f3.png?text=Size : 666px X 208px"
+                         data-widths="[666]"
+                         data-sizes="auto"
+                         alt="placeholder">
+                      </a>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endif %} 
+     
+    </div>     
+  </div>
+</div>
+
+
+
+<style type="text/css">
+  .ishi-newsletter-block .newsletter{
+    background:{{ section.settings.newsletter_background }};
+  }
+  .ishi-newsletter-block {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+  @media (max-width: 767px) {
+    .ishi-newsletter-block {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+</style>
+
+
+
+{% schema %}
+  {
+    "name": "Newsletter + Banner",
+    "class": "ishi-newsletter-block",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Newsletter Settings"
+      },
+      {
+        "type": "image_picker",
+        "id": "newsimage",
+        "label": "Background Image",
+        "info": "Size: 1920px X 450px"
+      },
+      {
+        "type": "color",
+        "id": "newsletter_background",
+        "label": "Background Color",
+        "default": "#f8f8f8"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Title",
+        "default": "SIGN UP & GET OFFER"
+      },
+      {
+        "type": "text",
+        "id": "sub-heading",
+        "label": "Sub Title",
+        "default": "Lorem ipsum dolor sit amet"
+      },
+       {
+        "type": "header",
+        "content": "Bannerblock"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_banner",
+        "label": "Show Banner",
+        "default": true
+      },
+      {
+        "type": "image_picker",
+        "id": "bannerimage1",
+        "label": "Image",
+        "info": "Size: 666px X 208px"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner1_scale_enable",
+        "label": "Scale Banner",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "bannerhover1",
+        "label": "Hover",
+        "options": [
+          { "value": "fadeinnormal", "label": "FadeIn Normal"},
+          { "value": "fadeinflip", "label": "FadeIn Flip"},
+          { "value": "fadeinrotate", "label": "FadeIn Rotate"},
+          { "value": "fadeinrotate3D", "label": "FadeIn Rotate3D"},
+          { "value": "fadeintop", "label": "FadeIn Top"},
+          { "value": "fadeinbottom", "label": "FadeIn Bottom"},
+          { "value": "fadeintopbottom", "label": "FadeIn Top Bottom"},
+          { "value": "fadeoutcenter", "label": "FadeOut Center"},
+          { "value": "fadeinoutbordercorner", "label": "FadeInOut BorderCorner"},
+          { "value": "doublefadeincenter", "label": "Double FadeInOut Center"},
+          { "value": "fadeinoutsingle", "label": "FadeInOut Single Scroll"},
+          { "value": "fadeinoutdoublevertical", "label": "FadeInOut Double Scroll"},
+          { "value": "perspective", "label": "Perspective"},
+          { "value": "fadeinoutrotatevertical", "label": "FadeInOut Rotate Vertical"}
+        ]
+      },
+      {
+        "type": "url",
+        "id": "banner1_link",
+        "label": "Link"
+      },
+      {
+        "type": "header",
+        "content": "Section Bottom Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_desktop",
+        "label": "Desktop",
+        "min": 0,
+        "max": 70,
+        "step": 10,
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "section_bottom_spacing_mobile",
+        "label": "Mobile",
+        "min": 0,
+        "max": 50,
+        "step": 10,
+        "default": 30
+      }
+    ],
+    "presets": [
+      {
+        "name": "Ishi Newsletter + Banner Block",
+        "category": "ishi themes"
+      }
+    ]
+  }
+{% endschema %}
