@@ -94,6 +94,7 @@
   <ItemGroup>
     <Content Include="Checkout.aspx" />
     <Content Include="ContactUs.aspx" />
+    <Content Include="Category.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="ProductBrowser.aspx" />
@@ -114,6 +115,13 @@
     </Compile>
     <Compile Include="ContactUs.aspx.vb">
       <DependentUpon>ContactUs.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Category.aspx.designer.vb">
+      <DependentUpon>Category.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Category.aspx.vb">
+      <DependentUpon>Category.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.designer.vb">
